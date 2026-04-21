@@ -919,6 +919,105 @@ body {
 .tag.green { background:var(--c-green-bg); color:var(--c-green-txt); }
 .tag.blue { background:var(--c-blue-bg); color:var(--c-blue); }
 
+/* ══════════════ CONVERSACIONES TABLE ══════════════ */
+.conv-filters {
+  display:flex; align-items:center; gap:6px;
+  margin-bottom:12px; flex-wrap:wrap;
+}
+.conv-filter-tab {
+  padding:6px 12px; border-radius:6px;
+  font-size:12px; font-weight:600;
+  color:var(--c-txt2); cursor:pointer;
+  border:1px solid var(--c-border);
+  background:var(--c-surface);
+  transition:all .12s;
+}
+.conv-filter-tab:hover { color:var(--c-txt); }
+.conv-filter-tab.active { background:var(--c-txt); color:white; border-color:var(--c-txt); }
+.conv-filter-tab .tab-count {
+  font-size:10px; font-weight:700;
+  background:rgba(255,255,255,.25); color:inherit;
+  padding:0 5px; border-radius:8px; margin-left:4px;
+}
+.conv-filter-tab:not(.active) .tab-count { background:var(--c-bg); color:var(--c-muted); }
+.conv-search-wrap { position:relative; flex:1; max-width:280px; }
+.conv-search-wrap .search-icon { position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--c-muted); pointer-events:none; }
+.conv-search-input {
+  width:100%; padding:7px 12px 7px 32px;
+  border:1px solid var(--c-border); border-radius:8px;
+  font-size:13px; background:var(--c-surface);
+  outline:none; font-family:'Inter',sans-serif;
+}
+.conv-search-input:focus { border-color:var(--c-brand); }
+.conv-table-surface {
+  background:var(--c-surface); border:1px solid var(--c-border);
+  border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow);
+}
+.conv-table { width:100%; border-collapse:collapse; font-size:13px; }
+.conv-table thead th {
+  padding:10px 14px; text-align:left;
+  font-size:11px; font-weight:600;
+  text-transform:uppercase; letter-spacing:.5px;
+  color:var(--c-muted); background:var(--c-bg);
+  border-bottom:1px solid var(--c-border);
+  white-space:nowrap;
+}
+.conv-table tbody td {
+  padding:11px 14px; border-bottom:1px solid var(--c-border);
+  vertical-align:middle;
+}
+.conv-table tbody tr:last-child td { border-bottom:none; }
+.conv-table tbody tr:hover { background:#FAFAF9; }
+.conv-id { font-size:13px; font-weight:700; color:var(--c-brand); }
+.conv-date-cell { font-size:12px; color:var(--c-txt2); white-space:nowrap; }
+.conv-client-name { font-weight:500; }
+.conv-no-reg { color:var(--c-muted); font-style:italic; }
+.conv-tel { font-family:'DM Mono',monospace; font-size:11px; color:var(--c-muted); }
+.conv-msgs { font-weight:600; text-align:center; }
+.modo-badge {
+  font-size:11px; font-weight:600;
+  padding:2px 9px; border-radius:20px;
+  white-space:nowrap;
+}
+.modo-badge.auto   { background:var(--c-green-bg); color:var(--c-green-dk); }
+.modo-badge.manual { background:var(--c-amber-bg); color:#92400e; }
+.estado-cell { display:flex; align-items:center; gap:5px; white-space:nowrap; }
+.estado-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.estado-dot.ok       { background:var(--c-green); }
+.estado-dot.atencion { background:var(--c-amber); }
+.estado-dot.urgente  { background:var(--c-red); }
+.estado-lbl { font-size:12px; color:var(--c-txt2); }
+.tienda-chip {
+  font-size:11px; font-weight:500;
+  padding:2px 8px; border-radius:20px; white-space:nowrap;
+}
+.tienda-chip.fisica  { background:var(--c-brand-bg); color:var(--c-brand-txt); }
+.tienda-chip.online  { background:var(--c-blue-bg);  color:var(--c-blue); }
+.tienda-chip.sin     { background:transparent; color:var(--c-muted); }
+.btn-xs { padding:4px 10px; font-size:11px; }
+.conv-pagination {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:11px 16px; border-top:1px solid var(--c-border);
+  font-size:12px; color:var(--c-txt2);
+}
+.pag-controls { display:flex; align-items:center; gap:8px; }
+.pag-btn {
+  width:28px; height:28px; border-radius:6px;
+  border:1px solid var(--c-border); background:var(--c-surface);
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  color:var(--c-txt2);
+}
+.pag-btn:hover { background:var(--c-bg); }
+.pag-btn:disabled { opacity:.35; cursor:not-allowed; }
+/* Conv detail back button */
+.conv-back-btn {
+  display:flex; align-items:center; gap:6px;
+  font-size:13px; font-weight:600; color:var(--c-brand);
+  cursor:pointer; padding:6px 0; margin-bottom:12px;
+  background:none; border:none; font-family:inherit;
+}
+.conv-back-btn:hover { text-decoration:underline; }
+
 /* ══════════════ TIENDAS VIEW ══════════════ */
 .stores-toolbar {
   display:flex; align-items:center; gap:10px;
@@ -1568,13 +1667,65 @@ body {
       <div class="page-header">
         <div>
           <div class="page-title">Conversaciones</div>
-          <div class="page-sub">Historial de mensajes de WhatsApp</div>
+          <div class="page-sub">Historial de conversaciones via WhatsApp · Depique</div>
         </div>
-        <div style="display:flex;gap:8px">
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="conv-search-wrap">
+            <svg class="search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="conv-search-input" placeholder="Buscar cliente o teléfono..." oninput="searchConv(this.value)">
+          </div>
           <button class="btn btn-ghost">Exportar</button>
         </div>
       </div>
-      <div class="chat-layout">
+
+      <!-- Vista tabla -->
+      <div id="conv-table-view">
+        <div class="conv-filters">
+          <button class="conv-filter-tab active" onclick="filterConv(this,'all')">Todas <span class="tab-count">15</span></button>
+          <button class="conv-filter-tab" onclick="filterConv(this,'atencion')">Requieren atención <span class="tab-count">4</span></button>
+          <button class="conv-filter-tab" onclick="filterConv(this,'manual')">Manuales <span class="tab-count">2</span></button>
+          <button class="conv-filter-tab" onclick="filterConv(this,'sin-tienda')">Sin tienda asignada <span class="tab-count">4</span></button>
+        </div>
+        <div class="conv-table-surface">
+          <table class="conv-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Fecha de creación</th>
+                <th>Última actualización</th>
+                <th>Cliente</th>
+                <th>Teléfono</th>
+                <th style="text-align:center">Mensajes</th>
+                <th>Modo</th>
+                <th>Estado</th>
+                <th>Tienda asociada</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="conv-tbody"></tbody>
+          </table>
+          <div class="conv-pagination">
+            <span id="conv-count">15 conversaciones</span>
+            <div class="pag-controls">
+              Página 1 de 2
+              <button class="pag-btn" disabled>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <button class="pag-btn">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vista detalle conversación -->
+      <div id="conv-detail-view" style="display:none">
+        <button class="conv-back-btn" onclick="showConvTable()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          Volver a conversaciones
+        </button>
+        <div class="chat-layout" style="height:calc(100vh - 54px - 120px)">
         <!-- lista -->
         <div class="chat-sidebar">
           <div class="chat-search">
@@ -1718,7 +1869,8 @@ body {
           </div>
         </div>
       </div>
-    </div>
+      </div><!-- /conv-detail-view -->
+    </div><!-- /view-conversaciones -->
 
     <!-- ── CATALOGO ── -->
     <div class="view" id="view-catalogo">
@@ -2696,6 +2848,91 @@ function setPeriod(btn, period) {
 }
 
 renderDashboard();
+
+// ─── CONVERSACIONES ───────────────────────────────────────────────────────────
+
+const CONV_DATA = [
+  { id:'#1042', creado:'21/04/2026 09:14', actualizado:'21/04/2026 11:52', cliente:'Marcos C.',    tel:'+34 612 345 678', msgs:8,  modo:'auto',   estado:'ok',       tienda:'Madrid' },
+  { id:'#1041', creado:'21/04/2026 08:47', actualizado:'21/04/2026 11:38', cliente:'Laura S.',     tel:'+34 634 221 990', msgs:5,  modo:'auto',   estado:'atencion', tienda:'Barcelona' },
+  { id:'#1040', creado:'21/04/2026 08:20', actualizado:'21/04/2026 10:55', cliente:'Juan R.',      tel:'+34 655 012 334', msgs:12, modo:'manual',  estado:'ok',       tienda:'Madrid' },
+  { id:'#1039', creado:'20/04/2026 19:33', actualizado:'21/04/2026 09:41', cliente:'Sofía P.',     tel:'+34 699 887 541', msgs:3,  modo:'auto',   estado:'urgente',  tienda:'Valencia' },
+  { id:'#1038', creado:'20/04/2026 18:05', actualizado:'20/04/2026 20:12', cliente:'Andrés R.',    tel:'+34 611 203 445', msgs:6,  modo:'auto',   estado:'ok',       tienda:'Online' },
+  { id:'#1037', creado:'20/04/2026 15:48', actualizado:'20/04/2026 17:30', cliente:'Carlos M.',    tel:'+34 677 554 321', msgs:9,  modo:'auto',   estado:'ok',       tienda:'Mallorca' },
+  { id:'#1036', creado:'20/04/2026 13:22', actualizado:'20/04/2026 15:09', cliente:'Elena B.',     tel:'+34 622 789 003', msgs:4,  modo:'manual',  estado:'atencion', tienda:null },
+  { id:'#1035', creado:'20/04/2026 11:10', actualizado:'20/04/2026 13:44', cliente:'Pablo F.',     tel:'+34 644 330 218', msgs:7,  modo:'auto',   estado:'ok',       tienda:'Madrid' },
+  { id:'#1034', creado:'19/04/2026 20:58', actualizado:'20/04/2026 08:17', cliente:'Marta L.',     tel:'+34 616 009 872', msgs:2,  modo:'auto',   estado:'ok',       tienda:'Barcelona' },
+  { id:'#1033', creado:'19/04/2026 18:31', actualizado:'19/04/2026 22:45', cliente:null,           tel:'+34 668 441 009', msgs:1,  modo:'auto',   estado:'ok',       tienda:null },
+  { id:'#1032', creado:'19/04/2026 16:04', actualizado:'19/04/2026 18:50', cliente:'Roberto V.',   tel:'+34 603 774 556', msgs:14, modo:'auto',   estado:'ok',       tienda:'Madrid' },
+  { id:'#1031', creado:'19/04/2026 12:39', actualizado:'19/04/2026 15:22', cliente:null,           tel:'+34 691 238 774', msgs:3,  modo:'auto',   estado:'atencion', tienda:null },
+  { id:'#1030', creado:'18/04/2026 17:11', actualizado:'19/04/2026 09:03', cliente:'Ana G.',       tel:'+34 655 902 118', msgs:11, modo:'auto',   estado:'ok',       tienda:'Valencia' },
+  { id:'#1029', creado:'18/04/2026 14:27', actualizado:'18/04/2026 17:58', cliente:'Diego N.',     tel:'+34 623 450 667', msgs:5,  modo:'manual',  estado:'atencion', tienda:null },
+  { id:'#1028', creado:'18/04/2026 09:50', actualizado:'18/04/2026 12:30', cliente:'Lucía T.',     tel:'+34 647 182 335', msgs:8,  modo:'auto',   estado:'ok',       tienda:'Mallorca' },
+];
+
+let convFilter = 'all';
+
+function renderConvTable(filter) {
+  convFilter = filter || convFilter;
+  const tbody = document.getElementById('conv-tbody');
+  if (!tbody) return;
+  const rows = CONV_DATA.filter(c => {
+    if (convFilter === 'atencion')  return c.estado === 'atencion' || c.estado === 'urgente';
+    if (convFilter === 'manual')    return c.modo === 'manual';
+    if (convFilter === 'sin-tienda') return !c.tienda;
+    return true;
+  });
+  tbody.innerHTML = rows.map(c => {
+    const estadoBadge = c.estado === 'ok'
+      ? `<span class="estado-dot ok" title="Sin alertas"></span>`
+      : c.estado === 'atencion'
+        ? `<span class="estado-dot atencion" title="Requiere atención"></span>`
+        : `<span class="estado-dot urgente" title="Urgente"></span>`;
+    const modoBadge = c.modo === 'auto'
+      ? `<span class="modo-badge auto">Auto</span>`
+      : `<span class="modo-badge manual">Manual</span>`;
+    const tiendaChip = c.tienda
+      ? `<span class="tienda-chip ${c.tienda === 'Online' ? 'online' : 'fisica'}">${c.tienda}</span>`
+      : `<span class="tienda-chip sin">—</span>`;
+    return `<tr>
+      <td><span class="conv-id">${c.id}</span></td>
+      <td><span class="conv-date-cell">${c.creado}</span></td>
+      <td><span class="conv-date-cell">${c.actualizado}</span></td>
+      <td>${c.cliente ? `<span class="conv-client-name">${c.cliente}</span>` : `<span class="conv-no-reg">Sin registrar</span>`}</td>
+      <td><span class="conv-tel">${c.tel}</span></td>
+      <td><span class="conv-msgs">${c.msgs}</span></td>
+      <td>${modoBadge}</td>
+      <td class="estado-cell">${estadoBadge}</td>
+      <td>${tiendaChip}</td>
+      <td><button class="btn btn-ghost btn-xs" onclick="showConvDetail('${c.id}')">Ver →</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function filterConv(btn, type) {
+  document.querySelectorAll('.conv-filter-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderConvTable(type);
+}
+
+function searchConv(val) {
+  const q = val.toLowerCase();
+  const rows = document.querySelectorAll('#conv-tbody tr');
+  rows.forEach(r => {
+    r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+function showConvDetail(id) {
+  document.getElementById('conv-table-view').style.display = 'none';
+  document.getElementById('conv-detail-view').style.display = '';
+}
+
+function showConvTable() {
+  document.getElementById('conv-detail-view').style.display = 'none';
+  document.getElementById('conv-table-view').style.display = '';
+}
+
+renderConvTable('all');
 </script>
 
 <!-- Drawer overlay -->
