@@ -568,54 +568,159 @@ body {
 .override-btn:hover { background:var(--c-bg); }
 
 /* ══════════════ CATALOGO VIEW ══════════════ */
-.catalog-grid {
-  display:grid;
-  grid-template-columns:repeat(3, 1fr);
-  gap:16px;
-}
-.product-card {
-  background:var(--c-surface);
-  border-radius:var(--radius);
-  border:1px solid var(--c-border);
-  overflow:hidden;
-  box-shadow:var(--shadow);
-  transition:box-shadow .15s;
-}
-.product-card:hover { box-shadow:var(--shadow-md); }
-.product-img {
-  height:140px;
-  background:linear-gradient(135deg, #e8f5e9, #c8e6c9);
-  display:flex; align-items:center; justify-content:center;
-  font-size:42px;
-  border-bottom:1px solid var(--c-border);
-}
-.product-body { padding:14px 16px; }
-.product-name { font-size:14px; font-weight:600; }
-.product-desc { font-size:12px; color:var(--c-txt2); margin-top:3px; line-height:1.4; }
-.product-price {
-  font-size:18px; font-weight:700;
-  color:var(--c-green-dk); margin-top:10px;
-}
-.product-footer {
+/* ══════════════ CATALOG VIEW ══════════════ */
+.sync-banner {
   display:flex; align-items:center; justify-content:space-between;
-  padding:10px 16px;
-  border-top:1px solid var(--c-border);
-  background:var(--c-bg);
+  background:var(--c-surface);
+  border:1px solid var(--c-border);
+  border-radius:var(--radius);
+  padding:12px 16px;
+  margin-bottom:16px;
+  font-size:13px;
 }
-.product-stock {
+.sync-left { display:flex; align-items:center; gap:8px; }
+.sync-right { display:flex; align-items:center; gap:10px; }
+.sync-dot {
+  width:8px; height:8px; border-radius:50%;
+  background:var(--c-green);
+  box-shadow:0 0 0 3px var(--c-green-bg);
+  flex-shrink:0;
+}
+.sync-source { font-weight:600; color:var(--c-txt); }
+.sync-sep { color:var(--c-muted); }
+.sync-detail { color:var(--c-txt2); }
+.sync-time { color:var(--c-muted); font-size:12px; }
+.sync-erp {
   font-size:11px; font-weight:600;
+  background:var(--c-purple-bg); color:var(--c-purple);
   padding:2px 8px; border-radius:20px;
 }
-.product-stock.ok { background:var(--c-green-bg); color:var(--c-green-txt); }
-.product-stock.low { background:var(--c-amber-bg); color:#92400e; }
-.product-actions { display:flex; gap:6px; }
+.catalog-surface {
+  background:var(--c-surface);
+  border:1px solid var(--c-border);
+  border-radius:var(--radius);
+  overflow:hidden;
+  margin-bottom:16px;
+}
+.catalog-table { width:100%; border-collapse:collapse; font-size:13px; }
+.catalog-table thead th {
+  padding:10px 16px;
+  text-align:left;
+  font-size:11px; font-weight:600;
+  text-transform:uppercase; letter-spacing:.5px;
+  color:var(--c-muted);
+  background:var(--c-bg);
+  border-bottom:1px solid var(--c-border);
+}
+.catalog-table thead th.num { text-align:right; }
+.catalog-table tbody td {
+  padding:13px 16px;
+  border-bottom:1px solid var(--c-border);
+  vertical-align:middle;
+}
+.catalog-table tbody tr:last-child td { border-bottom:none; }
+.catalog-table tbody tr.cat-row-off td { opacity:.45; }
+.catalog-table tbody tr:hover { background:#FAFAF9; }
+.catalog-table td.num { text-align:right; }
+.cat-name { display:flex; align-items:center; gap:10px; }
+.cat-emoji { font-size:20px; line-height:1; }
+.cat-label { font-weight:500; }
+.cat-count { font-size:13px; font-weight:600; color:var(--c-txt); }
+.cat-count-warn { font-size:11px; color:var(--c-amber); margin-left:4px; }
+.toggle-switch { position:relative; display:inline-block; width:38px; height:22px; }
+.toggle-switch input { opacity:0; width:0; height:0; position:absolute; }
+.toggle-slider {
+  position:absolute; cursor:pointer; inset:0;
+  background:#CBD5E1; border-radius:22px;
+  transition:background .2s;
+}
+.toggle-slider::before {
+  content:''; position:absolute;
+  width:16px; height:16px; left:3px; bottom:3px;
+  background:white; border-radius:50%;
+  transition:transform .2s;
+  box-shadow:0 1px 3px rgba(0,0,0,.2);
+}
+.toggle-switch input:checked + .toggle-slider { background:var(--c-green); }
+.toggle-switch input:checked + .toggle-slider::before { transform:translateX(16px); }
+.fitting-select {
+  padding:5px 10px;
+  border:1px solid var(--c-border);
+  border-radius:6px;
+  font-size:12px; font-family:inherit;
+  color:var(--c-txt2);
+  background:white; cursor:pointer; outline:none;
+}
+.fitting-select:focus { border-color:var(--c-brand); }
+.fitting-select:disabled { opacity:.4; cursor:not-allowed; }
+.shopify-link {
+  font-size:11px; font-family:'DM Mono', monospace;
+  color:var(--c-blue); text-decoration:none;
+  white-space:nowrap;
+}
+.shopify-link:hover { text-decoration:underline; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.spin-anim { animation:spin .8s linear infinite; display:inline-block; }
+.btn-sync svg { vertical-align:middle; }
+/* Bot flow card */
+.flow-card {
+  background:var(--c-surface);
+  border:1px solid var(--c-border);
+  border-radius:var(--radius);
+  overflow:hidden;
+}
+.flow-card-header {
+  display:flex; align-items:center; gap:8px;
+  padding:13px 16px;
+  border-bottom:1px solid var(--c-border);
+  font-size:13px; font-weight:600;
+  background:var(--c-bg);
+}
+.flow-body { padding:20px; display:flex; flex-direction:column; align-items:center; gap:0; }
+.flow-step {
+  display:flex; align-items:flex-start; gap:12px;
+  background:var(--c-bg); border:1px solid var(--c-border);
+  border-radius:var(--radius-sm); padding:12px 16px;
+  width:100%; max-width:520px;
+}
+.flow-step-num {
+  width:24px; height:24px; border-radius:50%;
+  background:var(--c-brand); color:white;
+  font-size:12px; font-weight:700;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.flow-step-title { font-size:13px; font-weight:600; }
+.flow-step-desc { font-size:12px; color:var(--c-txt2); margin-top:2px; }
+.flow-arrow-down { font-size:18px; color:var(--c-muted); margin:8px 0; line-height:1; }
+.flow-branches { display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%; max-width:520px; }
+.flow-branch {
+  background:var(--c-bg); border:1px solid var(--c-border);
+  border-radius:var(--radius-sm); padding:12px;
+}
+.flow-branch.yes { border-top:3px solid var(--c-green); }
+.flow-branch.no  { border-top:3px solid var(--c-blue); }
+.flow-branch-label {
+  font-size:11px; font-weight:700; letter-spacing:.4px;
+  text-transform:uppercase; display:block; margin-bottom:8px;
+}
+.flow-branch-label.yes { color:var(--c-green-dk); }
+.flow-branch-label.no  { color:var(--c-blue); }
+.flow-action-pill {
+  display:flex; align-items:center; gap:6px;
+  font-size:11px; padding:5px 10px;
+  border-radius:6px; font-weight:500; margin-bottom:4px;
+}
+.flow-action-pill.fitting { background:var(--c-brand-bg); color:var(--c-brand-txt); }
+.flow-action-pill.online  { background:var(--c-blue-bg);  color:var(--c-blue); }
+.flow-action-pill.fallback{ background:var(--c-green-bg); color:var(--c-green-dk); }
+/* product-btn kept for Respuestas view */
 .product-btn {
   padding:5px 10px;
   border-radius:6px; font-size:11px; font-weight:600;
   cursor:pointer; border:none;
 }
 .product-btn.edit { background:var(--c-blue-bg); color:var(--c-blue); }
-.product-btn.del { background:var(--c-red-bg); color:var(--c-red); }
+.product-btn.del  { background:var(--c-red-bg);  color:var(--c-red); }
 
 /* ══════════════ CONFIG VIEW ══════════════ */
 .config-layout {
@@ -1525,102 +1630,72 @@ body {
     <div class="view" id="view-catalogo">
       <div class="page-header">
         <div>
-          <div class="page-title">Catálogo de Productos</div>
-          <div class="page-sub">El bot usa este catálogo para responder consultas</div>
+          <div class="page-title">Catálogo del bot</div>
+          <div class="page-sub">Configurá qué categorías recomienda el bot · Los productos se sincronizan desde Shopify y el ERP</div>
         </div>
-        <button class="btn btn-primary">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Agregar producto
+        <button class="btn btn-ghost btn-sync" onclick="simulateSync()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-6"/></svg>
+          Sincronizar con Shopify
         </button>
       </div>
-      <div class="catalog-grid">
-        <div class="product-card">
-          <div class="product-img" style="background:linear-gradient(135deg,#fdf0f0,#f8d7d8)">🏌️</div>
-          <div class="product-body">
-            <div class="product-name">Driver Callaway Paradym Ai Smoke</div>
-            <div class="product-desc">Driver con IA en la cara, bajo spin, alta velocidad. Loft 9°. Disponible en varios shafts.</div>
-            <div class="product-price">€ 549</div>
-          </div>
-          <div class="product-footer">
-            <span class="product-stock ok">✓ En stock</span>
-            <div class="product-actions">
-              <button class="product-btn edit">Editar</button>
-              <button class="product-btn del">Eliminar</button>
+
+      <!-- Sync status -->
+      <div class="sync-banner">
+        <div class="sync-left">
+          <span class="sync-dot"></span>
+          <span class="sync-source">Shopify · depique.com</span>
+          <span class="sync-sep">·</span>
+          <span class="sync-detail">247 productos en <strong>8 categorías</strong></span>
+        </div>
+        <div class="sync-right">
+          <span class="sync-time" id="sync-time">Última sync hace 3 min</span>
+          <span class="sync-erp">ERP conectado</span>
+        </div>
+      </div>
+
+      <!-- Category table -->
+      <div class="catalog-surface">
+        <table class="catalog-table">
+          <thead>
+            <tr>
+              <th>Categoría</th>
+              <th class="num">Productos</th>
+              <th>Visible en el bot</th>
+              <th>Regla de fitting</th>
+              <th>Link Shopify</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="catalog-tbody"></tbody>
+        </table>
+      </div>
+
+      <!-- Bot flow card -->
+      <div class="flow-card">
+        <div class="flow-card-header">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Flujo de recomendación del bot
+          <span class="tag green">Activo</span>
+        </div>
+        <div class="flow-body">
+          <div class="flow-step">
+            <div class="flow-step-num">1</div>
+            <div>
+              <div class="flow-step-title">Detectar ubicación del usuario</div>
+              <div class="flow-step-desc">El bot verifica si el usuario está en una ciudad con tienda Depique (Madrid, Barcelona, Valencia, Mallorca)</div>
             </div>
           </div>
-        </div>
-        <div class="product-card">
-          <div class="product-img" style="background:linear-gradient(135deg,#f5f3ff,#ede9fe)">⛳</div>
-          <div class="product-body">
-            <div class="product-name">Set Hierros Titleist T150</div>
-            <div class="product-desc">Set completo hierros 4-PW. Forjado, alto control. Ideal jugadores medios-bajos de handicap.</div>
-            <div class="product-price">€ 1.199</div>
-          </div>
-          <div class="product-footer">
-            <span class="product-stock ok">✓ En stock</span>
-            <div class="product-actions">
-              <button class="product-btn edit">Editar</button>
-              <button class="product-btn del">Eliminar</button>
+          <div class="flow-arrow-down">↓</div>
+          <div class="flow-branches">
+            <div class="flow-branch yes">
+              <span class="flow-branch-label yes">Con tienda cercana</span>
+              <div class="flow-action-pill fitting">🏌️ Sugerir fitting en tienda</div>
+              <div class="flow-action-pill fallback">↩ Si rechaza → venta online</div>
             </div>
-          </div>
-        </div>
-        <div class="product-card">
-          <div class="product-img" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb)">👕</div>
-          <div class="product-body">
-            <div class="product-name">Polo BRAX Golf Tour</div>
-            <div class="product-desc">Polo técnico de golf, tejido transpirable 4-way stretch, protección solar UPF 50+.</div>
-            <div class="product-price">€ 89</div>
-          </div>
-          <div class="product-footer">
-            <span class="product-stock low">⚠ Stock bajo</span>
-            <div class="product-actions">
-              <button class="product-btn edit">Editar</button>
-              <button class="product-btn del">Eliminar</button>
-            </div>
-          </div>
-        </div>
-        <div class="product-card">
-          <div class="product-img" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9)">👟</div>
-          <div class="product-body">
-            <div class="product-name">Zapatos FootJoy Pro SL</div>
-            <div class="product-desc">Zapatos de golf sin clavos, impermeables, suela de alto agarre. Tallas 40–47.</div>
-            <div class="product-price">€ 149</div>
-          </div>
-          <div class="product-footer">
-            <span class="product-stock ok">✓ En stock</span>
-            <div class="product-actions">
-              <button class="product-btn edit">Editar</button>
-              <button class="product-btn del">Eliminar</button>
-            </div>
-          </div>
-        </div>
-        <div class="product-card">
-          <div class="product-img" style="background:linear-gradient(135deg,#fff8e1,#ffecb3)">🎒</div>
-          <div class="product-body">
-            <div class="product-name">Bolsa Titleist Players 4</div>
-            <div class="product-desc">Bolsa stand bag ultraligera, 4 divisores, 7 bolsillos. Disponible en negro, blanco y rojo.</div>
-            <div class="product-price">€ 199</div>
-          </div>
-          <div class="product-footer">
-            <span class="product-stock ok">✓ En stock</span>
-            <div class="product-actions">
-              <button class="product-btn edit">Editar</button>
-              <button class="product-btn del">Eliminar</button>
-            </div>
-          </div>
-        </div>
-        <div class="product-card">
-          <div class="product-img" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0)">🏅</div>
-          <div class="product-body">
-            <div class="product-name">Pelotas Titleist Pro V1 (12u)</div>
-            <div class="product-desc">La pelota de golf más usada en el mundo. Trayectoria consistente, alto spin en approach.</div>
-            <div class="product-price">€ 52</div>
-          </div>
-          <div class="product-footer">
-            <span class="product-stock ok">✓ En stock</span>
-            <div class="product-actions">
-              <button class="product-btn edit">Editar</button>
-              <button class="product-btn del">Eliminar</button>
+            <div class="flow-branch no">
+              <span class="flow-branch-label no">Sin tienda cercana</span>
+              <div class="flow-action-pill online">💬 Preguntar qué busca</div>
+              <div class="flow-action-pill online">🔗 Enviar link de categoría en Shopify</div>
             </div>
           </div>
         </div>
@@ -2188,6 +2263,64 @@ body {
 
 <script>
 
+const CATALOG_DATA = [
+  { id:'palos',      name:'Palos de golf',        emoji:'🏌️', total:122, active:122, botOn:true,  fitting:'always', slug:'palos-de-golf' },
+  { id:'ropa',       name:'Ropa de golf',          emoji:'👕', total:67,  active:67,  botOn:true,  fitting:'never',  slug:'ropa-de-golf' },
+  { id:'zapatos',    name:'Zapatos de golf',        emoji:'👟', total:29,  active:25,  botOn:true,  fitting:'never',  slug:'zapatos-de-golf' },
+  { id:'bolsas',     name:'Bolsas, carros y GPS',  emoji:'🎒', total:31,  active:31,  botOn:true,  fitting:'never',  slug:'bolsas-carros-gps' },
+  { id:'bolas',      name:'Bolas y accesorios',    emoji:'⛳', total:44,  active:38,  botOn:true,  fitting:'never',  slug:'bolas-y-accesorios' },
+];
+
+function renderCatalog() {
+  const tbody = document.getElementById('catalog-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = CATALOG_DATA.map((cat, i) => `
+    <tr class="${cat.botOn ? '' : 'cat-row-off'}">
+      <td><div class="cat-name"><span class="cat-emoji">${cat.emoji}</span><span class="cat-label">${cat.name}</span></div></td>
+      <td class="num">
+        <span class="cat-count">${cat.active}/${cat.total}</span>
+        ${cat.active < cat.total ? `<span class="cat-count-warn">(${cat.total - cat.active} ocultos)</span>` : ''}
+      </td>
+      <td>
+        <label class="toggle-switch">
+          <input type="checkbox" ${cat.botOn ? 'checked' : ''} onchange="toggleBotCat(${i}, this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+      </td>
+      <td>
+        <select class="fitting-select" ${cat.botOn ? '' : 'disabled'} onchange="CATALOG_DATA[${i}].fitting=this.value">
+          <option value="always" ${cat.fitting==='always'?'selected':''}>Siempre sugerir</option>
+          <option value="nearby" ${cat.fitting==='nearby'?'selected':''}>Solo si hay tienda cercana</option>
+          <option value="never"  ${cat.fitting==='never' ?'selected':''}>No sugerir</option>
+        </select>
+      </td>
+      <td><a class="shopify-link" href="#" onclick="return false">depique.com/collections/${cat.slug}</a></td>
+      <td>
+        <button class="row-btn" title="Ver productos">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function toggleBotCat(idx, val) {
+  CATALOG_DATA[idx].botOn = val;
+  renderCatalog();
+}
+
+function simulateSync() {
+  const btn = document.querySelector('.btn-sync');
+  if (!btn) return;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin-anim"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-6"/></svg></span> Sincronizando...';
+  setTimeout(() => {
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-6"/></svg> Sincronizar con Shopify';
+    document.getElementById('sync-time').textContent = 'Última sync hace unos segundos';
+  }, 1800);
+}
+
 const STORES_DATA = [{"name": "Depique.com · Tienda Online", "type": "ecommerce", "loc": "depique.com · Shopify · España", "ventas": 14820, "fittings": 0, "ticket": 620, "phone1": "—", "phone2": "", "email": "", "hours": [["Lun – Dom", "24h online", ""]], "services": ["Envíos", "Web"]}, {"name": "Depique Madrid", "type": "propia", "loc": "C/ Valportillo II 8 bis, Alcobendas · Madrid", "ventas": 82450, "fittings": 34, "ticket": 2180, "phone1": "914 117 925", "phone2": "671 421 235", "email": "madrid@depique.com", "hours": [["Lun – Vie", "10:30 – 19:30", ""], ["Sábado", "09:30 – 14:00", ""], ["Domingo", "Cerrado", "closed"]], "services": ["Fitting", "Taller"]}, {"name": "Depique Barcelona", "type": "propia", "loc": "C/ Johann Sebastian Bach, 9 · Barcelona", "ventas": 94210, "fittings": 41, "ticket": 2298, "phone1": "932 012 931", "phone2": "678 316 606", "email": "barcelona@depique.com", "hours": [["Lun – Vie", "10:00 – 20:30", ""], ["Sábado", "10:30 – 14:00", ""], ["Domingo", "Cerrado", "closed"]], "services": ["Fitting", "Taller"]}, {"name": "Depique Valencia", "type": "propia", "loc": "Av. Regne de Valencia, 64 · Valencia", "ventas": 58790, "fittings": 22, "ticket": 1945, "phone1": "961 678 825", "phone2": "697 420 499", "email": "valencia@depique.com", "hours": [["Lun – Vie", "10:00–14:00 · 16:30–20:00", ""], ["Sábado", "10:30 – 14:00", ""], ["Domingo", "Cerrado", "closed"]], "services": ["Fitting", "Taller"]}, {"name": "Depique Calvià", "type": "propia", "loc": "Polígon Son Bugadelles, Santa Ponça · Mallorca", "ventas": 47320, "fittings": 18, "ticket": 2112, "phone1": "971 691 984", "phone2": "647 827 902", "email": "calvia@depique.com", "hours": [["Lun – Vie", "09:30 – 18:30", ""], ["Sábado", "10:00 – 14:00", ""], ["Domingo", "Cerrado", "closed"]], "services": ["Fitting", "Taller"]}, {"name": "Club de Golf Llavaneras", "type": "proshop", "loc": "Camí Golf, 49, Sant Andreu de Llavaneres · Barcelona", "ventas": 24180, "fittings": 6, "ticket": 1420, "phone1": "93 792 60 50", "phone2": "652 958 754", "email": "llavaneras@depique.com", "hours": [["Lunes", "Cerrado", "closed"], ["Mar – Sáb", "08:30–14:00 · 15:00–17:30", ""], ["Domingo", "09:00 – 14:00", ""]], "services": ["Pro Shop"]}, {"name": "Real Club de Golf El Prat", "type": "proshop", "loc": "Plans de Bonvilar, 17, Terrassa · Barcelona", "ventas": 38520, "fittings": 9, "ticket": 1680, "phone1": "937 28 10 06", "phone2": "611 565 306", "email": "elprat@depique.com", "hours": [["Lun – Sáb", "08:30–13:30 · 14:00–17:00", ""], ["Domingo", "09:00 – 14:00", ""]], "services": ["Pro Shop"]}, {"name": "Club de Golf Terramar", "type": "proshop", "loc": "Carretera del golf s/n, Sitges · Barcelona", "ventas": 19640, "fittings": 4, "ticket": 1350, "phone1": "938 11 01 78", "phone2": "623 277 177", "email": "terramar@depique.com", "hours": [["Lunes", "Cerrado", "closed"], ["Mar – Sáb", "08:30–14:00 · 15:00–17:30", ""], ["Domingo", "09:00 – 14:00", ""]], "services": ["Pro Shop"]}, {"name": "Club de Golf Vallromanes", "type": "proshop", "loc": "Psg. Torre Tavernera s/n, Vallromanes · Barcelona", "ventas": 16890, "fittings": 3, "ticket": 1280, "phone1": "657 970 255", "phone2": "", "email": "vallromanes@depique.com", "hours": [["Martes", "Cerrado", "closed"], ["Lun · Mié – Sáb", "08:30–14:00 · 15:00–17:30", ""], ["Domingo", "09:00 – 14:00", ""]], "services": ["Pro Shop"]}, {"name": "Depique Bendinat", "type": "proshop", "loc": "C/ Campoamor s/n, Bendinat · Mallorca", "ventas": 31450, "fittings": 8, "ticket": 1820, "phone1": "971 412 224", "phone2": "", "email": "bendinat@depique.com", "hours": [["Lun – Sáb", "08:30–14:00 · 15:00–17:30", ""], ["Domingo", "09:00 – 14:00", ""]], "services": ["Fitting", "Pro Shop"]}, {"name": "Club de Golf El Bosque", "type": "proshop", "loc": "A-3 km 4.1, Godelleta · Valencia", "ventas": 22710, "fittings": 5, "ticket": 1510, "phone1": "961 80 80 09", "phone2": "", "email": "golf.office@elbosquegolf.com", "hours": [["Lun – Dom", "08:00 – 19:00", ""]], "services": ["Pro Shop"]}, {"name": "Depique Golf Academy Gràcia", "type": "academy", "loc": "Travessera de Gràcia, 72 · Barcelona", "ventas": 28900, "fittings": 12, "ticket": 1240, "phone1": "934 14 52 35", "phone2": "", "email": "academia@depique.com", "hours": [["Lun – Vie", "10:00 – 20:00", ""], ["Sáb – Dom", "Cerrado", "closed"]], "services": ["Clases", "Fitting", "Simulador"]}, {"name": "Club de Golf Sant Cugat", "type": "franquicia", "loc": "C/ Villà 79, Sant Cugat del Vallès · Barcelona", "ventas": 26840, "fittings": 0, "ticket": 1390, "phone1": "93 674 39 08", "phone2": "", "email": "botiga@golfsantcugat.com", "hours": [["Martes", "Cerrado", "closed"], ["Resto", "07:00 – 19:00", ""]], "services": ["Pro Shop"]}, {"name": "Club de Golf Barcelona", "type": "franquicia", "loc": "Av. Golf Masia Bach, Sant Esteve Sesrovires · Barcelona", "ventas": 21310, "fittings": 0, "ticket": 1270, "phone1": "93 772 88 00", "phone2": "", "email": "info@golfbarcelona.com", "hours": [["Lun – Dom", "07:45 – 19:00", ""]], "services": ["Pro Shop"]}];
 function navigate(view) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -2285,6 +2418,8 @@ function closeDrawer() {
   document.getElementById('ficha-drawer').classList.remove('open');
   document.getElementById('drawer-overlay').classList.remove('open');
 }
+
+renderCatalog();
 </script>
 
 <!-- Drawer overlay -->
