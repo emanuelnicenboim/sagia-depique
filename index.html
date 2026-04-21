@@ -999,6 +999,78 @@ body {
 .conv-table th.sortable:hover { color:var(--c-txt); }
 .sort-icon { font-size:10px; color:var(--c-muted); margin-left:3px; }
 .sort-icon.sort-active { color:var(--c-brand); }
+
+/* ── DETALLE CONVERSACIÓN ── */
+.cd-topbar {
+  display:flex; align-items:center; gap:14px;
+  padding:0 0 20px 0;
+}
+.cd-back {
+  width:36px; height:36px; border-radius:50%;
+  border:1px solid var(--c-border); background:var(--c-surface);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:var(--c-txt2); flex-shrink:0;
+  transition:background .15s;
+}
+.cd-back:hover { background:var(--c-bg); }
+.cd-title-block { flex:1; }
+.cd-title-main { font-size:18px; font-weight:600; color:var(--c-txt); }
+.cd-title-sub { font-size:13px; color:var(--c-muted); margin-top:2px; }
+.cd-mode-pill {
+  display:flex; align-items:center; gap:6px;
+  padding:7px 14px; border-radius:20px;
+  background:var(--c-green-bg); color:var(--c-green-dk);
+  font-size:13px; font-weight:500; cursor:pointer;
+  border:1px solid #b2f2d0;
+}
+.cd-mode-dot { width:7px; height:7px; border-radius:50%; background:var(--c-green); flex-shrink:0; }
+.cd-info-card {
+  background:var(--c-surface); border:1px solid var(--c-border);
+  border-radius:var(--radius); padding:20px 24px; margin-bottom:16px;
+}
+.cd-section-label { font-size:13px; font-weight:600; color:var(--c-txt); margin-bottom:16px; }
+.cd-info-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+.cd-info-key { font-size:11px; color:var(--c-muted); font-weight:500; text-transform:uppercase; letter-spacing:.04em; margin-bottom:4px; }
+.cd-info-val { font-size:14px; color:var(--c-txt); font-weight:500; }
+.cd-chat-card {
+  background:var(--c-surface); border:1px solid var(--c-border);
+  border-radius:var(--radius); padding:20px 24px; margin-bottom:12px;
+}
+.cd-messages { display:flex; flex-direction:column; gap:16px; max-height:360px; overflow-y:auto; padding-right:4px; }
+.cd-msg { display:flex; align-items:flex-start; gap:10px; max-width:72%; }
+.cd-msg.bot  { align-self:flex-start; }
+.cd-msg.user { align-self:flex-end; flex-direction:row-reverse; }
+.cd-av {
+  width:32px; height:32px; border-radius:50%; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700;
+}
+.cd-av.bot-av  { background:var(--c-green-bg); color:var(--c-green-dk); }
+.cd-av.user-av { background:var(--c-brand-bg); color:var(--c-brand); }
+.cd-bubble {
+  padding:10px 14px; border-radius:12px; font-size:14px; line-height:1.5; position:relative;
+}
+.cd-msg.bot  .cd-bubble { background:var(--c-bg); border:1px solid var(--c-border); border-top-left-radius:3px; color:var(--c-txt); }
+.cd-msg.user .cd-bubble { background:var(--c-brand); color:#fff; border-top-right-radius:3px; }
+.cd-ts { font-size:11px; color:var(--c-muted); margin-top:4px; }
+.cd-msg.user .cd-ts { text-align:right; color:rgba(255,255,255,.7); }
+.cd-input-bar {
+  display:flex; gap:10px; align-items:center;
+  background:var(--c-surface); border:1px solid var(--c-border);
+  border-radius:var(--radius); padding:10px 14px;
+}
+.cd-input {
+  flex:1; border:none; outline:none; font-size:14px; background:transparent;
+  color:var(--c-txt); font-family:inherit;
+}
+.cd-input::placeholder { color:var(--c-muted); }
+.cd-input:disabled { cursor:not-allowed; }
+.cd-send {
+  width:36px; height:36px; border-radius:50%; border:none; cursor:pointer;
+  background:var(--c-green); color:#fff; display:flex; align-items:center; justify-content:center;
+  transition:background .15s; flex-shrink:0;
+}
+.cd-send:disabled { background:var(--c-border); cursor:not-allowed; }
+.cd-send:not(:disabled):hover { background:var(--c-green-dk); }
 .conv-pagination {
   display:flex; align-items:center; justify-content:space-between;
   padding:11px 16px; border-top:1px solid var(--c-border);
@@ -1724,154 +1796,60 @@ body {
 
       <!-- Vista detalle conversación -->
       <div id="conv-detail-view" style="display:none">
-        <button class="conv-back-btn" onclick="showConvTable()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-          Volver a conversaciones
-        </button>
-        <div class="chat-layout" style="height:calc(100vh - 54px - 120px)">
-        <!-- lista -->
-        <div class="chat-sidebar">
-          <div class="chat-search">
-            <div class="search-wrap">
-              <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              <input class="search-input" placeholder="Buscar conversación...">
-            </div>
+
+        <!-- Top bar -->
+        <div class="cd-topbar">
+          <button class="cd-back" onclick="showConvTable()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="cd-title-block">
+            <div class="cd-title-main">Conversación</div>
+            <div class="cd-title-sub" id="cd-subtitle">—</div>
           </div>
-          <div class="chat-list">
-            <div class="chat-item active">
-              <div class="chat-av">MC</div>
-              <div class="chat-info">
-                <div class="chat-name">María C.</div>
-                <div class="chat-preview">¿El producto viene en azul?</div>
-              </div>
-              <div class="chat-side">
-                <div class="chat-time">12:32</div>
-                <div class="unread-badge">2</div>
-              </div>
+          <div class="cd-mode-pill" id="cd-mode-pill">
+            <span class="cd-mode-dot"></span>
+            <span id="cd-mode-label">Respuesta automática</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+
+        <!-- Información del cliente -->
+        <div class="cd-info-card">
+          <div class="cd-section-label">Información del Cliente</div>
+          <div class="cd-info-grid">
+            <div class="cd-info-field">
+              <div class="cd-info-key">Cliente</div>
+              <div class="cd-info-val" id="cd-client">—</div>
             </div>
-            <div class="chat-item">
-              <div class="chat-av blue-av">JR</div>
-              <div class="chat-info">
-                <div class="chat-name">Juan R.</div>
-                <div class="chat-preview bot">🤖 ¡Claro! Tenemos stock...</div>
-              </div>
-              <div class="chat-side">
-                <div class="chat-time">12:24</div>
-              </div>
+            <div class="cd-info-field">
+              <div class="cd-info-key">Origen</div>
+              <div class="cd-info-val">WhatsApp</div>
             </div>
-            <div class="chat-item">
-              <div class="chat-av purple-av">LS</div>
-              <div class="chat-info">
-                <div class="chat-name">Laura S.</div>
-                <div class="chat-preview">¿Hacen envíos a Córdoba?</div>
-              </div>
-              <div class="chat-side">
-                <div class="chat-time">12:17</div>
-                <div class="unread-badge">1</div>
-              </div>
+            <div class="cd-info-field">
+              <div class="cd-info-key">Sesión</div>
+              <div class="cd-info-val" id="cd-session">—</div>
             </div>
-            <div class="chat-item">
-              <div class="chat-av amber-av">AR</div>
-              <div class="chat-info">
-                <div class="chat-name">Andrés R.</div>
-                <div class="chat-preview bot">🤖 ¡Con gusto! Aquí la info...</div>
-              </div>
-              <div class="chat-side">
-                <div class="chat-time">12:10</div>
-              </div>
-            </div>
-            <div class="chat-item">
-              <div class="chat-av">SP</div>
-              <div class="chat-info">
-                <div class="chat-name">Sofía P.</div>
-                <div class="chat-preview">¿Cuánto tarda el envío?</div>
-              </div>
-              <div class="chat-side">
-                <div class="chat-time">11:58</div>
-                <div class="unread-badge">4</div>
-              </div>
-            </div>
-            <div class="chat-item">
-              <div class="chat-av" style="background:#e0fff4;color:#0d6e4a">CM</div>
-              <div class="chat-info">
-                <div class="chat-name">Carlos M.</div>
-                <div class="chat-preview bot">🤖 Los envíos demoran entre...</div>
-              </div>
-              <div class="chat-side">
-                <div class="chat-time">11:40</div>
-              </div>
+            <div class="cd-info-field">
+              <div class="cd-info-key">Tienda</div>
+              <div class="cd-info-val" id="cd-tienda">—</div>
             </div>
           </div>
         </div>
 
-        <!-- ventana de chat -->
-        <div class="chat-window">
-          <div class="chat-header">
-            <div class="chat-header-av">MC</div>
-            <div class="chat-header-info">
-              <div class="chat-header-name">Marcos C. · +34 612 345 678</div>
-              <div class="chat-header-sub">Última actividad: hace 2 minutos</div>
-            </div>
-            <div class="chat-header-actions">
-              <button class="icon-btn" title="Perfil">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              </button>
-              <button class="icon-btn" title="Buscar">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              </button>
-            </div>
-          </div>
-
-          <div class="chat-messages">
-            <div class="date-separator"><span>Hoy</span></div>
-
-            <div class="msg-row user">
-              <div class="msg-bubble">
-                Hola! quiero saber si tienen el driver Callaway Paradym
-                <div class="msg-time">12:28</div>
-              </div>
-            </div>
-
-            <div class="msg-row bot">
-              <div class="msg-bubble">
-                <div class="msg-tag">🤖 Bot</div>
-                ¡Hola! Bienvenido a Depique 👋 Sí, tenemos el Callaway Paradym Ai Smoke disponible. Es uno de nuestros drivers más pedidos. ¿Te cuento los lofts y shafts disponibles?
-                <div class="msg-time">12:28</div>
-              </div>
-            </div>
-
-            <div class="msg-row user">
-              <div class="msg-bubble">
-                Sí, y el precio también
-                <div class="msg-time">12:30</div>
-              </div>
-            </div>
-
-            <div class="msg-row bot">
-              <div class="msg-bubble">
-                <div class="msg-tag">🤖 Bot</div>
-                El Callaway Paradym Ai Smoke está a <strong>€549</strong>. Disponible en loft 9°, 10.5° y 12°, con shaft estándar Project X Cypher. También podemos hacer un <em>fitting personalizado</em> para elegir el shaft ideal según tu swing. ¿Te interesa?
-                <div class="msg-time">12:31</div>
-              </div>
-            </div>
-
-            <div class="msg-row user">
-              <div class="msg-bubble">
-                ¿El driver viene en loft 10.5°?
-                <div class="msg-time">12:32</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="chat-input-bar">
-            <div class="bot-indicator">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              El bot está respondiendo automáticamente
-            </div>
-            <button class="override-btn">Tomar control</button>
-          </div>
+        <!-- Mensajes -->
+        <div class="cd-chat-card">
+          <div class="cd-section-label">Conversación</div>
+          <div class="cd-messages" id="cd-messages"></div>
         </div>
-      </div>
+
+        <!-- Input -->
+        <div class="cd-input-bar">
+          <input class="cd-input" id="cd-input" placeholder="Cambia a respuesta manual para enviar" disabled>
+          <button class="cd-send" id="cd-send" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+
       </div><!-- /conv-detail-view -->
     </div><!-- /view-conversaciones -->
 
@@ -2963,9 +2941,68 @@ function searchConv(val) {
   });
 }
 
+const CONV_MESSAGES = {
+  '#1042': [
+    { from:'user', text:'Hola! quiero saber si tienen el driver Callaway Paradym', ts:'21/04/2026 09:14' },
+    { from:'bot',  text:'¡Hola! Bienvenido a Depique 👋 Sí, tenemos el Callaway Paradym Ai Smoke disponible. Es uno de nuestros drivers más pedidos. ¿Te cuento los lofts y shafts disponibles?', ts:'21/04/2026 09:15' },
+    { from:'user', text:'Sí, y el precio también', ts:'21/04/2026 09:30' },
+    { from:'bot',  text:'El Callaway Paradym Ai Smoke está a <strong>€549</strong>. Disponible en loft 9°, 10.5° y 12°, con shaft estándar Project X Cypher. También podemos hacer un <em>fitting personalizado</em> para elegir el shaft ideal según tu swing. ¿Te interesa?', ts:'21/04/2026 09:31' },
+    { from:'user', text:'¿El driver viene en loft 10.5°?', ts:'21/04/2026 11:52' },
+  ],
+  '#1041': [
+    { from:'bot',  text:'¡Hola! Bienvenido a Depique ⛳ ¿En qué puedo ayudarte hoy?', ts:'21/04/2026 08:47' },
+    { from:'user', text:'Quiero devolver unos zapatos que compré la semana pasada', ts:'21/04/2026 08:49' },
+    { from:'bot',  text:'Entiendo, puedo ayudarte con la devolución. ¿Me das el número de pedido para verificarlo?', ts:'21/04/2026 08:50' },
+    { from:'user', text:'No sé el número, lo compré en la tienda física', ts:'21/04/2026 11:38' },
+  ],
+  '#1039': [
+    { from:'user', text:'URGENTE necesito hablar con alguien del equipo', ts:'20/04/2026 19:33' },
+    { from:'bot',  text:'Hola, estoy aquí para ayudarte. ¿Cuál es tu consulta?', ts:'20/04/2026 19:33' },
+    { from:'user', text:'Me llegó el pedido equivocado y mañana tengo un torneo', ts:'21/04/2026 09:41' },
+  ],
+};
+
 function showConvDetail(id) {
+  const conv = CONV_DATA.find(c => c.id === id);
+  if (!conv) return;
+
+  document.getElementById('cd-subtitle').textContent =
+    (conv.cliente || 'Sin registrar') + ' · ' + conv.tel + ' (WhatsApp)';
+  document.getElementById('cd-client').textContent  = conv.cliente || 'Sin registrar';
+  document.getElementById('cd-session').textContent = conv.tel;
+  document.getElementById('cd-tienda').textContent  = conv.tienda || '—';
+
+  const isAuto = conv.modo === 'auto';
+  const pill = document.getElementById('cd-mode-pill');
+  const label = document.getElementById('cd-mode-label');
+  label.textContent = isAuto ? 'Respuesta automática' : 'Modo manual';
+  pill.style.background  = isAuto ? 'var(--c-green-bg)' : 'var(--c-amber-bg)';
+  pill.style.color       = isAuto ? 'var(--c-green-dk)' : '#92400e';
+  pill.style.borderColor = isAuto ? '#b2f2d0' : '#fcd34d';
+  document.querySelector('.cd-mode-dot').style.background = isAuto ? 'var(--c-green)' : 'var(--c-amber)';
+  const inp = document.getElementById('cd-input');
+  const btn = document.getElementById('cd-send');
+  inp.disabled = isAuto;
+  btn.disabled = isAuto;
+  inp.placeholder = isAuto ? 'Cambia a respuesta manual para enviar' : 'Escribir mensaje...';
+
+  const msgs = CONV_MESSAGES[id] || [
+    { from:'user', text:'(no hay mensajes cargados para esta conversación)', ts:conv.creado }
+  ];
+  const initials = s => s ? s.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() : '??';
+  document.getElementById('cd-messages').innerHTML = msgs.map(m => `
+    <div class="cd-msg ${m.from}">
+      <div class="cd-av ${m.from === 'bot' ? 'bot-av' : 'user-av'}">${m.from === 'bot' ? '🤖' : initials(conv.cliente || '??')}</div>
+      <div>
+        <div class="cd-bubble">${m.text}</div>
+        <div class="cd-ts">${m.ts}</div>
+      </div>
+    </div>`).join('');
+
   document.getElementById('conv-table-view').style.display = 'none';
   document.getElementById('conv-detail-view').style.display = '';
+  const msgsEl = document.getElementById('cd-messages');
+  setTimeout(() => { msgsEl.scrollTop = msgsEl.scrollHeight; }, 50);
 }
 
 function showConvTable() {
