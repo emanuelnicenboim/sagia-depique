@@ -995,6 +995,10 @@ body {
 .tienda-chip.online  { background:var(--c-blue-bg);  color:var(--c-blue); }
 .tienda-chip.sin     { background:transparent; color:var(--c-muted); }
 .btn-xs { padding:4px 10px; font-size:11px; }
+.conv-table th.sortable { cursor:pointer; user-select:none; white-space:nowrap; }
+.conv-table th.sortable:hover { color:var(--c-txt); }
+.sort-icon { font-size:10px; color:var(--c-muted); margin-left:3px; }
+.sort-icon.sort-active { color:var(--c-brand); }
 .conv-pagination {
   display:flex; align-items:center; justify-content:space-between;
   padding:11px 16px; border-top:1px solid var(--c-border);
@@ -1688,16 +1692,15 @@ body {
         </div>
         <div class="conv-table-surface">
           <table class="conv-table">
-            <thead>
+            <thead id="conv-thead">
               <tr>
-                <th>ID</th>
-                <th>Fecha de creación</th>
-                <th>Última actualización</th>
+                <th class="sortable" onclick="sortConv('id')">ID <span class="sort-icon" data-col="id">↕</span></th>
+                <th class="sortable" onclick="sortConv('creado')">Fecha de creación <span class="sort-icon" data-col="creado">↕</span></th>
+                <th class="sortable" onclick="sortConv('actualizado')">Última actualización <span class="sort-icon" data-col="actualizado">↕</span></th>
                 <th>Cliente</th>
                 <th>Teléfono</th>
-                <th style="text-align:center">Mensajes</th>
-                <th>Modo</th>
-                <th>Estado</th>
+                <th class="sortable" style="text-align:center" onclick="sortConv('msgs')">Mensajes <span class="sort-icon" data-col="msgs">↕</span></th>
+                <th class="sortable" onclick="sortConv('modo')">Modo <span class="sort-icon" data-col="modo">↕</span></th>
                 <th>Tienda asociada</th>
                 <th>Acciones</th>
               </tr>
@@ -2869,24 +2872,63 @@ const CONV_DATA = [
   { id:'#1028', creado:'18/04/2026 09:50', actualizado:'18/04/2026 12:30', cliente:'Lucía T.',     tel:'+34 647 182 335', msgs:8,  modo:'auto',   estado:'ok',       tienda:'Mallorca' },
 ];
 
-let convFilter = 'all';
+let convFilter  = 'all';
+let convSortCol = 'id';
+let convSortDir = 'desc';
+
+function parseConvDate(str) {
+  // "21/04/2026 09:14" → timestamp
+  const [d, t] = str.split(' ');
+  const [dd, mm, yyyy] = d.split('/');
+  return new Date(`${yyyy}-${mm}-${dd}T${t}`).getTime();
+}
+
+function sortConv(col) {
+  if (convSortCol === col) {
+    convSortDir = convSortDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    convSortCol = col;
+    convSortDir = col === 'msgs' ? 'desc' : 'asc';
+  }
+  renderConvTable();
+}
 
 function renderConvTable(filter) {
-  convFilter = filter || convFilter;
+  if (filter) convFilter = filter;
   const tbody = document.getElementById('conv-tbody');
   if (!tbody) return;
-  const rows = CONV_DATA.filter(c => {
-    if (convFilter === 'atencion')  return c.estado === 'atencion' || c.estado === 'urgente';
-    if (convFilter === 'manual')    return c.modo === 'manual';
+
+  let rows = CONV_DATA.filter(c => {
+    if (convFilter === 'atencion')   return c.estado === 'atencion' || c.estado === 'urgente';
+    if (convFilter === 'manual')     return c.modo === 'manual';
     if (convFilter === 'sin-tienda') return !c.tienda;
     return true;
   });
+
+  rows = [...rows].sort((a, b) => {
+    let va, vb;
+    if (convSortCol === 'id')          { va = parseInt(a.id.slice(1)); vb = parseInt(b.id.slice(1)); }
+    else if (convSortCol === 'creado') { va = parseConvDate(a.creado); vb = parseConvDate(b.creado); }
+    else if (convSortCol === 'actualizado') { va = parseConvDate(a.actualizado); vb = parseConvDate(b.actualizado); }
+    else if (convSortCol === 'msgs')   { va = a.msgs; vb = b.msgs; }
+    else if (convSortCol === 'modo')   { va = a.modo; vb = b.modo; }
+    const cmp = va < vb ? -1 : va > vb ? 1 : 0;
+    return convSortDir === 'asc' ? cmp : -cmp;
+  });
+
+  // update sort icons
+  document.querySelectorAll('.sort-icon').forEach(el => {
+    const col = el.dataset.col;
+    if (col === convSortCol) {
+      el.textContent = convSortDir === 'asc' ? '↑' : '↓';
+      el.classList.add('sort-active');
+    } else {
+      el.textContent = '↕';
+      el.classList.remove('sort-active');
+    }
+  });
+
   tbody.innerHTML = rows.map(c => {
-    const estadoBadge = c.estado === 'ok'
-      ? `<span class="estado-dot ok" title="Sin alertas"></span>`
-      : c.estado === 'atencion'
-        ? `<span class="estado-dot atencion" title="Requiere atención"></span>`
-        : `<span class="estado-dot urgente" title="Urgente"></span>`;
     const modoBadge = c.modo === 'auto'
       ? `<span class="modo-badge auto">Auto</span>`
       : `<span class="modo-badge manual">Manual</span>`;
@@ -2901,7 +2943,6 @@ function renderConvTable(filter) {
       <td><span class="conv-tel">${c.tel}</span></td>
       <td><span class="conv-msgs">${c.msgs}</span></td>
       <td>${modoBadge}</td>
-      <td class="estado-cell">${estadoBadge}</td>
       <td>${tiendaChip}</td>
       <td><button class="btn btn-ghost btn-xs" onclick="showConvDetail('${c.id}')">Ver →</button></td>
     </tr>`;
