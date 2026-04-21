@@ -391,6 +391,68 @@ body {
 .activity-txt strong { color:var(--c-txt); font-weight:600; }
 .activity-time { margin-left:auto; color:var(--c-muted); white-space:nowrap; font-size:11px; padding-left:8px; }
 
+/* ══════════════ DASHBOARD ANALYTICS ══════════════ */
+.stats-grid-6 {
+  display:grid; grid-template-columns:repeat(6,1fr);
+  gap:12px; margin-bottom:16px;
+}
+.stat-card-sm {
+  background:var(--c-surface); border-radius:var(--radius);
+  border:1px solid var(--c-border); padding:14px 16px; box-shadow:var(--shadow);
+}
+.stat-val-sm { font-size:20px; font-weight:700; margin-top:8px; }
+.stat-sub    { font-size:11px; color:var(--c-muted); margin-top:2px; }
+.full-mb { margin-bottom:16px; }
+.three-col { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:16px; }
+.chart-card {
+  background:var(--c-surface); border:1px solid var(--c-border);
+  border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden;
+}
+.chart-head {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:13px 18px; border-bottom:1px solid var(--c-border);
+  flex-wrap:wrap; gap:8px;
+}
+.chart-legend { display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+.legend-item  { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--c-txt2); }
+.legend-line  { width:20px; height:3px; border-radius:2px; flex-shrink:0; }
+.chart-body   { padding:14px 18px 6px; }
+.top-item {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 18px; border-bottom:1px solid var(--c-border); font-size:13px;
+}
+.top-item:last-child { border-bottom:none; }
+.top-rank { width:18px; font-size:11px; font-weight:700; color:var(--c-muted); flex-shrink:0; text-align:center; }
+.top-rank.gold { color:#c9a84c; }
+.top-info { flex:1; min-width:0; }
+.top-name { font-size:13px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.top-meta { font-size:11px; color:var(--c-muted); margin-top:1px; }
+.top-val  { font-size:12px; font-weight:700; color:var(--c-txt); white-space:nowrap; flex-shrink:0; }
+.top-bar-wrap { width:44px; height:4px; background:var(--c-border); border-radius:2px; flex-shrink:0; }
+.top-bar-fill { height:4px; border-radius:2px; }
+.bot-badge { font-size:10px; font-weight:600; background:var(--c-green-bg); color:var(--c-green-dk); padding:1px 7px; border-radius:10px; }
+.split-wrap { padding:14px 18px; border-bottom:1px solid var(--c-border); }
+.split-bar-bg { height:8px; background:var(--c-border); border-radius:4px; overflow:hidden; display:flex; margin:8px 0; }
+.split-bar-seg { height:8px; }
+.split-bar-seg.physical { background:var(--c-brand); }
+.split-bar-seg.online   { background:var(--c-blue); }
+.split-row { display:flex; justify-content:space-between; }
+.split-label { display:flex; align-items:center; gap:5px; font-size:12px; color:var(--c-txt2); }
+.split-dot { width:8px; height:8px; border-radius:50%; }
+.split-pct { font-weight:700; color:var(--c-txt); margin-left:4px; }
+.sparkline-wrap { padding:14px 18px; border-bottom:1px solid var(--c-border); }
+.sparkline-lbl { font-size:11px; color:var(--c-muted); margin-bottom:4px; }
+.sparkline-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.sparkline-val { font-size:18px; font-weight:700; }
+.sparkline-months { display:flex; justify-content:space-between; margin-top:4px; }
+.sparkline-month { font-size:9px; color:var(--c-muted); }
+.perf-row { display:grid; grid-template-columns:1fr 1fr; }
+.perf-cell { padding:12px 16px; border-right:1px solid var(--c-border); }
+.perf-cell:last-child { border-right:none; }
+.perf-val { font-size:18px; font-weight:700; margin-top:2px; }
+.perf-lbl { font-size:11px; color:var(--c-txt2); }
+.perf-sub { font-size:10px; color:var(--c-muted); margin-top:2px; }
+
 /* ══════════════ CONVERSACIONES VIEW ══════════════ */
 .chat-layout {
   display:grid;
@@ -1310,57 +1372,148 @@ body {
       <div class="page-header">
         <div>
           <div class="page-title">Dashboard</div>
-          <div class="page-sub">Resumen de actividad del bot de WhatsApp · hoy</div>
+          <div class="page-sub">Visión general del negocio y del bot · Depique</div>
         </div>
-        <button class="btn btn-ghost">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
-          Actualizar
-        </button>
-      </div>
-
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-row">
-            <div class="stat-icon green">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            </div>
-            <span class="stat-delta up">+12%</span>
-          </div>
-          <div class="stat-val">124</div>
-          <div class="stat-lbl">Conversaciones hoy</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-row">
-            <div class="stat-icon blue">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            </div>
-            <span class="stat-delta up">+5</span>
-          </div>
-          <div class="stat-val">47</div>
-          <div class="stat-lbl">Usuarios únicos</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-row">
-            <div class="stat-icon amber">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-            </div>
-            <span class="stat-delta up">+23%</span>
-          </div>
-          <div class="stat-val">38</div>
-          <div class="stat-lbl">Consultas de productos</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-row">
-            <div class="stat-icon purple">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-            </div>
-            <span class="stat-delta up">96%</span>
-          </div>
-          <div class="stat-val">1.8s</div>
-          <div class="stat-lbl">Tiempo de respuesta</div>
+        <div class="period-selector">
+          <button class="period-btn" onclick="setPeriod(this,'7d')">7 días</button>
+          <button class="period-btn active" onclick="setPeriod(this,'mes')">Este mes</button>
+          <button class="period-btn" onclick="setPeriod(this,'3m')">3 meses</button>
         </div>
       </div>
 
+      <!-- 6 KPIs -->
+      <div class="stats-grid-6">
+        <div class="stat-card-sm">
+          <div class="stat-row">
+            <div class="stat-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6"/></svg></div>
+            <span id="kpi-ventas-delta" class="stat-delta up">+8%</span>
+          </div>
+          <div id="kpi-ventas" class="stat-val-sm">€ 427.6k</div>
+          <div class="stat-lbl">Ventas totales</div>
+        </div>
+        <div class="stat-card-sm">
+          <div class="stat-row">
+            <div class="stat-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+            <span id="kpi-fittings-delta" class="stat-delta up">+15%</span>
+          </div>
+          <div id="kpi-fittings" class="stat-val-sm">142</div>
+          <div class="stat-lbl">Fittings agendados</div>
+          <div id="kpi-fittings-sub" class="stat-sub">118 realizados (83%)</div>
+        </div>
+        <div class="stat-card-sm">
+          <div class="stat-row">
+            <div class="stat-icon amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+            <span id="kpi-ticket-delta" class="stat-delta up">+6%</span>
+          </div>
+          <div id="kpi-ticket" class="stat-val-sm">€ 1.847</div>
+          <div class="stat-lbl">Ticket promedio</div>
+        </div>
+        <div class="stat-card-sm">
+          <div class="stat-row">
+            <div class="stat-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            <span id="kpi-resolucion-delta" class="stat-delta up">+3pp</span>
+          </div>
+          <div id="kpi-resolucion" class="stat-val-sm">78%</div>
+          <div class="stat-lbl">Resolución autónoma</div>
+          <div class="stat-sub">Sin derivar a humano</div>
+        </div>
+        <div class="stat-card-sm">
+          <div class="stat-row">
+            <div class="stat-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+            <span id="kpi-conversion-delta" class="stat-delta up">+4pp</span>
+          </div>
+          <div id="kpi-conversion" class="stat-val-sm">23%</div>
+          <div class="stat-lbl">Conversión del bot</div>
+          <div class="stat-sub">Consulta → venta o fitting</div>
+        </div>
+        <div class="stat-card-sm">
+          <div class="stat-row">
+            <div class="stat-icon amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <span id="kpi-horario-delta" class="stat-delta up">+6pp</span>
+          </div>
+          <div id="kpi-horario" class="stat-val-sm">34%</div>
+          <div class="stat-lbl">Fuera de horario</div>
+          <div class="stat-sub">Bot cubre 24 h / 7 días</div>
+        </div>
+      </div>
+
+      <!-- Gráfico de ventas -->
+      <div class="full-mb">
+        <div class="chart-card">
+          <div class="chart-head">
+            <div id="chart-title" class="card-title">Ventas por mes · últimos 8 meses (en miles €)</div>
+            <div class="chart-legend">
+              <div class="legend-item"><div class="legend-line" style="background:var(--c-brand);height:3px"></div>Total red</div>
+              <div class="legend-item"><div class="legend-line" style="background:#475569"></div>Madrid</div>
+              <div class="legend-item"><div class="legend-line" style="background:#3b82f6"></div>Barcelona</div>
+              <div class="legend-item"><div class="legend-line" style="background:#f59e0b"></div>Valencia</div>
+              <div class="legend-item"><div class="legend-line" style="background:#8b5cf6"></div>Mallorca</div>
+              <div class="legend-item"><div class="legend-line" style="background:#06b6d4"></div>Online</div>
+            </div>
+          </div>
+          <div class="chart-body">
+            <svg id="sales-chart-svg" width="100%" viewBox="0 0 760 175" style="display:block;overflow:visible"></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 columnas -->
+      <div class="three-col">
+        <!-- Top vendidos -->
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Productos más vendidos</div>
+          </div>
+          <div id="top-vendidos-list"></div>
+        </div>
+
+        <!-- Top consultados bot -->
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Más consultados via bot</div>
+            <span class="bot-badge">WhatsApp</span>
+          </div>
+          <div id="top-consultados-list"></div>
+        </div>
+
+        <!-- Split canal + ticket + bot stats -->
+        <div class="card">
+          <div class="split-wrap">
+            <div style="font-size:12px;font-weight:600;margin-bottom:8px">Split de canal</div>
+            <div class="split-bar-bg">
+              <div id="split-bar-physical" class="split-bar-seg physical" style="width:94%"></div>
+              <div id="split-bar-online" class="split-bar-seg online" style="width:6%"></div>
+            </div>
+            <div class="split-row">
+              <div class="split-label"><span class="split-dot" style="background:var(--c-brand)"></span>Físico<span id="split-pct-physical" class="split-pct">94%</span></div>
+              <div class="split-label"><span class="split-dot" style="background:var(--c-blue)"></span>Online<span id="split-pct-online" class="split-pct">6%</span></div>
+            </div>
+          </div>
+          <div class="sparkline-wrap">
+            <div class="sparkline-lbl">Evolución ticket promedio</div>
+            <div class="sparkline-top">
+              <div id="sparkline-val" class="sparkline-val">€ 1.847</div>
+              <span id="sparkline-delta" class="stat-delta up" style="font-size:11px">+6% vs mes ant.</span>
+            </div>
+            <svg id="ticket-chart-svg" width="100%" viewBox="0 0 200 50" style="display:block"></svg>
+            <div id="sparkline-months" class="sparkline-months"></div>
+          </div>
+          <div class="perf-row">
+            <div class="perf-cell">
+              <div class="perf-lbl">Fittings realizados</div>
+              <div id="perf-fittings-val" class="perf-val">118</div>
+              <div id="perf-fittings-sub" class="perf-sub">83% de los agendados</div>
+            </div>
+            <div class="perf-cell">
+              <div class="perf-lbl">Consultas nocturnas</div>
+              <div id="perf-nocturnas-val" class="perf-val">287</div>
+              <div class="perf-sub">Resueltas por el bot</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conversaciones + actividad -->
       <div class="two-col">
         <div class="card">
           <div class="card-head">
@@ -1370,100 +1523,41 @@ body {
           <div class="conv-list">
             <div class="conv-item active" onclick="navigate('conversaciones')">
               <div class="conv-avatar">MC<div class="online-dot"></div></div>
-              <div class="conv-info">
-                <div class="conv-name">Marcos C.</div>
-                <div class="conv-last">¿El driver viene en loft 10.5°?</div>
-              </div>
-              <div class="conv-meta">
-                <div class="conv-time">hace 2m</div>
-                <div class="conv-unread">2</div>
-              </div>
+              <div class="conv-info"><div class="conv-name">Marcos C.</div><div class="conv-last">¿El driver viene en loft 10.5°?</div></div>
+              <div class="conv-meta"><div class="conv-time">hace 2m</div><div class="conv-unread">2</div></div>
             </div>
             <div class="conv-item" onclick="navigate('conversaciones')">
               <div class="conv-avatar" style="background:#e0ebff;color:#3b6fd4">JR</div>
-              <div class="conv-info">
-                <div class="conv-name">Julia R.</div>
-                <div class="conv-last">Bot: ¡Sí! El Paradym tiene loft 9°, 10.5° y 12°.</div>
-              </div>
-              <div class="conv-meta">
-                <div class="conv-time">hace 8m</div>
-              </div>
+              <div class="conv-info"><div class="conv-name">Julia R.</div><div class="conv-last">Bot: ¡Sí! El Paradym tiene loft 9°, 10.5° y 12°.</div></div>
+              <div class="conv-meta"><div class="conv-time">hace 8m</div></div>
             </div>
             <div class="conv-item" onclick="navigate('conversaciones')">
               <div class="conv-avatar" style="background:#f5e0ff;color:#8b3dd4">LS</div>
-              <div class="conv-info">
-                <div class="conv-name">Luis S.</div>
-                <div class="conv-last">¿Hacen fitting para hierros?</div>
-              </div>
-              <div class="conv-meta">
-                <div class="conv-time">hace 15m</div>
-                <div class="conv-unread">1</div>
-              </div>
+              <div class="conv-info"><div class="conv-name">Luis S.</div><div class="conv-last">¿Hacen fitting para hierros?</div></div>
+              <div class="conv-meta"><div class="conv-time">hace 15m</div><div class="conv-unread">1</div></div>
             </div>
             <div class="conv-item" onclick="navigate('conversaciones')">
               <div class="conv-avatar" style="background:#fff3e0;color:#e65100">AR</div>
-              <div class="conv-info">
-                <div class="conv-name">Andrés R.</div>
-                <div class="conv-last">Perfecto, reservo el turno de fitting.</div>
-              </div>
-              <div class="conv-meta">
-                <div class="conv-time">hace 22m</div>
-              </div>
+              <div class="conv-info"><div class="conv-name">Andrés R.</div><div class="conv-last">Perfecto, reservo el turno de fitting.</div></div>
+              <div class="conv-meta"><div class="conv-time">hace 22m</div></div>
             </div>
             <div class="conv-item" onclick="navigate('conversaciones')">
               <div class="conv-avatar">SP</div>
-              <div class="conv-info">
-                <div class="conv-name">Sofía P.</div>
-                <div class="conv-last">¿Tienen tallas junior en ropa?</div>
-              </div>
-              <div class="conv-meta">
-                <div class="conv-time">hace 35m</div>
-                <div class="conv-unread">4</div>
-              </div>
+              <div class="conv-info"><div class="conv-name">Sofía P.</div><div class="conv-last">¿Tienen tallas junior en ropa?</div></div>
+              <div class="conv-meta"><div class="conv-time">hace 35m</div><div class="conv-unread">4</div></div>
             </div>
           </div>
         </div>
-
         <div class="card">
-          <div class="card-head">
-            <div class="card-title">Actividad reciente</div>
-          </div>
+          <div class="card-head"><div class="card-title">Actividad reciente</div></div>
           <div class="activity-list">
-            <div class="activity-item">
-              <div class="activity-dot green"></div>
-              <div class="activity-txt"><strong>Marcos C.</strong> inició una conversación nueva</div>
-              <div class="activity-time">12:32</div>
-            </div>
-            <div class="activity-item">
-              <div class="activity-dot blue"></div>
-              <div class="activity-txt">Bot respondió consulta del <em>Driver Callaway Paradym</em></div>
-              <div class="activity-time">12:29</div>
-            </div>
-            <div class="activity-item">
-              <div class="activity-dot amber"></div>
-              <div class="activity-txt"><strong>Luis S.</strong> consultó disponibilidad de <em>fitting de hierros</em></div>
-              <div class="activity-time">12:15</div>
-            </div>
-            <div class="activity-item">
-              <div class="activity-dot green"></div>
-              <div class="activity-txt">Se actualizó el catálogo — <em>Polos BRAX temporada</em></div>
-              <div class="activity-time">11:50</div>
-            </div>
-            <div class="activity-item">
-              <div class="activity-dot blue"></div>
-              <div class="activity-txt">Bot derivó consulta de fitting a asesor humano</div>
-              <div class="activity-time">11:38</div>
-            </div>
-            <div class="activity-item">
-              <div class="activity-dot amber"></div>
-              <div class="activity-txt">Respuesta editada: <em>consulta_fitting</em></div>
-              <div class="activity-time">11:10</div>
-            </div>
-            <div class="activity-item">
-              <div class="activity-dot green"></div>
-              <div class="activity-txt"><strong>Sofía P.</strong> consultó ropa junior</div>
-              <div class="activity-time">10:58</div>
-            </div>
+            <div class="activity-item"><div class="activity-dot green"></div><div class="activity-txt"><strong>Marcos C.</strong> inició una conversación nueva</div><div class="activity-time">12:32</div></div>
+            <div class="activity-item"><div class="activity-dot blue"></div><div class="activity-txt">Bot respondió consulta del <em>Driver Callaway Paradym</em></div><div class="activity-time">12:29</div></div>
+            <div class="activity-item"><div class="activity-dot amber"></div><div class="activity-txt"><strong>Luis S.</strong> consultó disponibilidad de <em>fitting de hierros</em></div><div class="activity-time">12:15</div></div>
+            <div class="activity-item"><div class="activity-dot green"></div><div class="activity-txt">Se actualizó el catálogo — <em>Polos BRAX temporada</em></div><div class="activity-time">11:50</div></div>
+            <div class="activity-item"><div class="activity-dot blue"></div><div class="activity-txt">Bot derivó consulta de fitting a asesor humano</div><div class="activity-time">11:38</div></div>
+            <div class="activity-item"><div class="activity-dot amber"></div><div class="activity-txt">Respuesta editada: <em>consulta_fitting</em></div><div class="activity-time">11:10</div></div>
+            <div class="activity-item"><div class="activity-dot green"></div><div class="activity-txt"><strong>Sofía P.</strong> consultó ropa junior</div><div class="activity-time">10:58</div></div>
           </div>
         </div>
       </div>
@@ -2420,6 +2514,188 @@ function closeDrawer() {
 }
 
 renderCatalog();
+
+/* ── Period datasets ── */
+const PERIOD_DATA = {
+  '7d': {
+    kpis: { ventas:['€ 94.2k','+3%'], fittings:['31','+8%','26 realizados (84%)'], ticket:['€ 1.823','+2%'], resolucion:['76%','+1pp'], conversion:['21%','+2pp'], horario:['38%','+9pp'] },
+    chart: { title:'Ventas por día · últimos 7 días (en miles €)', months:['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'], total:[12,15,14,18,16,22,8], maxV:30, lastLabel:'€22k', gridVals:[0,5,10,15,20,25,30],
+      stores:[{color:'#475569',values:[4.5,5.8,5.2,6.8,6.1,8.2,3.1]},{color:'#3b82f6',values:[3.8,4.9,4.4,5.7,5.2,7.1,2.8]},{color:'#f59e0b',values:[2.1,2.6,2.4,3.1,2.8,3.9,1.5]},{color:'#8b5cf6',values:[1.1,1.4,1.2,1.6,1.5,2.1,0.8]},{color:'#06b6d4',values:[0.5,0.6,0.5,0.7,0.6,0.9,0.3]}] },
+    ticket: { vals:[1812,1830,1818,1841,1825,1849,1856], val:'€ 1.823', delta:'+2% vs día ant.', months:['L','M','X','J','V','S','D'] },
+    split: { physical:91, online:9 },
+    perf: { fittings:'26', fittingsSub:'84% de los agendados', nocturnas:'67' },
+    vendidos: [
+      {name:'Driver Callaway Paradym AI', cat:'Palos de golf', display:'€ 4.8k', val:4800},
+      {name:'Set Hierros Titleist T150',  cat:'Palos de golf', display:'€ 3.9k', val:3900},
+      {name:'Zapatos FootJoy Pro SL',     cat:'Zapatos de golf',display:'€ 2.7k', val:2700},
+      {name:'Polo BRAX Golf Tour',        cat:'Ropa de golf',  display:'€ 2.1k', val:2100},
+      {name:'Pelotas Titleist Pro V1',    cat:'Bolas y acc.',  display:'€ 1.6k', val:1600},
+    ],
+    consultados: [
+      {name:'Driver Callaway Paradym AI', cat:'Palos de golf', display:'34', val:34},
+      {name:'Putter TaylorMade Spider',   cat:'Palos de golf', display:'28', val:28},
+      {name:'Set Hierros Titleist T150',  cat:'Palos de golf', display:'24', val:24},
+      {name:'Zapatos FootJoy Pro SL',     cat:'Zapatos de golf',display:'18', val:18},
+      {name:'Polo BRAX Golf Tour',        cat:'Ropa de golf',  display:'15', val:15},
+    ],
+  },
+  'mes': {
+    kpis: { ventas:['€ 427.6k','+8%'], fittings:['142','+15%','118 realizados (83%)'], ticket:['€ 1.847','+6%'], resolucion:['78%','+3pp'], conversion:['23%','+4pp'], horario:['34%','+6pp'] },
+    chart: { title:'Ventas por mes · últimos 8 meses (en miles €)', months:['Sep','Oct','Nov','Dic','Ene','Feb','Mar','Abr'], total:[412,468,422,328,368,418,452,491], maxV:600, lastLabel:'€491k', gridVals:[0,100,200,300,400,500,600],
+      stores:[{color:'#475569',values:[98,112,105,82,89,104,118,132]},{color:'#3b82f6',values:[72,83,76,57,63,74,88,101]},{color:'#f59e0b',values:[46,52,48,35,40,50,59,64]},{color:'#8b5cf6',values:[38,43,40,29,33,39,47,51]},{color:'#06b6d4',values:[11,13,12,9,10,12,15,16]}] },
+    ticket: { vals:[1820,1890,1840,1760,1795,1830,1847,1920], val:'€ 1.847', delta:'+6% vs mes ant.', months:['Sep','Oct','Nov','Dic','Ene','Feb','Mar','Abr'] },
+    split: { physical:94, online:6 },
+    perf: { fittings:'118', fittingsSub:'83% de los agendados', nocturnas:'287' },
+    vendidos: [
+      {name:'Driver Callaway Paradym AI', cat:'Palos de golf', display:'€ 21.9k', val:21900},
+      {name:'Set Hierros Titleist T150',  cat:'Palos de golf', display:'€ 18.6k', val:18600},
+      {name:'Zapatos FootJoy Pro SL',     cat:'Zapatos de golf',display:'€ 12.4k', val:12400},
+      {name:'Polo BRAX Golf Tour',        cat:'Ropa de golf',  display:'€ 9.8k',  val:9800},
+      {name:'Pelotas Titleist Pro V1',    cat:'Bolas y acc.',  display:'€ 7.2k',  val:7200},
+    ],
+    consultados: [
+      {name:'Driver Callaway Paradym AI', cat:'Palos de golf', display:'142', val:142},
+      {name:'Set Hierros Titleist T150',  cat:'Palos de golf', display:'98',  val:98},
+      {name:'Putter TaylorMade Spider',   cat:'Palos de golf', display:'87',  val:87},
+      {name:'Zapatos FootJoy Pro SL',     cat:'Zapatos de golf',display:'71', val:71},
+      {name:'Polo BRAX Golf Tour',        cat:'Ropa de golf',  display:'63',  val:63},
+    ],
+  },
+  '3m': {
+    kpis: { ventas:['€ 1.276M','+11%'], fittings:['398','+18%','328 realizados (82%)'], ticket:['€ 1.862','+9%'], resolucion:['79%','+4pp'], conversion:['24%','+6pp'], horario:['35%','+7pp'] },
+    chart: { title:'Ventas por mes · últimos 12 meses (en miles €)', months:['May','Jun','Jul','Ago','Sep','Oct','Nov','Dic','Ene','Feb','Mar','Abr'], total:[358,412,381,298,412,468,422,328,368,418,452,491], maxV:600, lastLabel:'€491k', gridVals:[0,100,200,300,400,500,600],
+      stores:[{color:'#475569',values:[86,98,91,71,98,112,105,82,89,104,118,132]},{color:'#3b82f6',values:[65,76,70,52,72,83,76,57,63,74,88,101]},{color:'#f59e0b',values:[42,48,44,32,46,52,48,35,40,50,59,64]},{color:'#8b5cf6',values:[35,40,37,28,38,43,40,29,33,39,47,51]},{color:'#06b6d4',values:[9,11,10,8,11,13,12,9,10,12,15,16]}] },
+    ticket: { vals:[1790,1812,1798,1775,1820,1890,1840,1760,1795,1830,1847,1920], val:'€ 1.862', delta:'+9% vs trim. ant.', months:['May','Jun','Jul','Ago','Sep','Oct','Nov','Dic','Ene','Feb','Mar','Abr'] },
+    split: { physical:93, online:7 },
+    perf: { fittings:'328', fittingsSub:'82% de los agendados', nocturnas:'814' },
+    vendidos: [
+      {name:'Driver Callaway Paradym AI', cat:'Palos de golf', display:'€ 58.4k', val:58400},
+      {name:'Set Hierros Titleist T150',  cat:'Palos de golf', display:'€ 49.2k', val:49200},
+      {name:'Zapatos FootJoy Pro SL',     cat:'Zapatos de golf',display:'€ 34.1k', val:34100},
+      {name:'Polo BRAX Golf Tour',        cat:'Ropa de golf',  display:'€ 26.7k', val:26700},
+      {name:'Pelotas Titleist Pro V1',    cat:'Bolas y acc.',  display:'€ 19.8k', val:19800},
+    ],
+    consultados: [
+      {name:'Driver Callaway Paradym AI', cat:'Palos de golf', display:'398', val:398},
+      {name:'Set Hierros Titleist T150',  cat:'Palos de golf', display:'287', val:287},
+      {name:'Putter TaylorMade Spider',   cat:'Palos de golf', display:'241', val:241},
+      {name:'Zapatos FootJoy Pro SL',     cat:'Zapatos de golf',display:'198', val:198},
+      {name:'Polo BRAX Golf Tour',        cat:'Ropa de golf',  display:'176', val:176},
+    ],
+  },
+};
+
+let currentPeriod = 'mes';
+
+function makeSvgPath(values, maxV, minV, cW, cH, ox, oy) {
+  const n = values.length, xS = cW / (n - 1), range = maxV - minV;
+  return values.map((v, i) => {
+    const x = (ox + i * xS).toFixed(1);
+    const y = (oy + cH - ((v - minV) / range) * cH).toFixed(1);
+    return `${i===0?'M':'L'}${x},${y}`;
+  }).join(' ');
+}
+
+function renderSalesChart() {
+  const el = document.getElementById('sales-chart-svg');
+  if (!el) return;
+  const c = PERIOD_DATA[currentPeriod].chart;
+  const ox=52, oy=10, cW=700, cH=145, maxV=c.maxV, n=c.months.length, xS=cW/(n-1);
+  const grid = c.gridVals.map(v => {
+    const y=(oy+cH-(v/maxV)*cH).toFixed(1);
+    return `<line x1="${ox}" y1="${y}" x2="${ox+cW}" y2="${y}" stroke="#e5e5e3" stroke-width="1"/>
+    <text x="${ox-6}" y="${y}" text-anchor="end" dominant-baseline="middle" font-size="10" fill="#a0a09a">${v>0?v+'k':''}</text>`;
+  }).join('');
+  const xlabels = c.months.map((m,i) =>
+    `<text x="${(ox+i*xS).toFixed(1)}" y="${oy+cH+16}" text-anchor="middle" font-size="10" fill="#a0a09a">${m}</text>`
+  ).join('');
+  const storePaths = c.stores.map(s => {
+    const d = makeSvgPath(s.values,maxV,0,cW,cH,ox,oy);
+    return `<path d="${d}" fill="none" stroke="${s.color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.65"/>`;
+  }).join('');
+  const totalD = makeSvgPath(c.total,maxV,0,cW,cH,ox,oy);
+  const dots = c.total.map((v,i) => {
+    const x=(ox+i*xS).toFixed(1), y=(oy+cH-(v/maxV)*cH).toFixed(1);
+    return `<circle cx="${x}" cy="${y}" r="3" fill="white" stroke="#c0272d" stroke-width="2"/>`;
+  }).join('');
+  const lx=(ox+(n-1)*xS).toFixed(1), ly=(oy+cH-(c.total[n-1]/maxV)*cH).toFixed(1);
+  el.innerHTML = `${grid}${xlabels}${storePaths}
+    <path d="${totalD}" fill="none" stroke="#c0272d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    ${dots}
+    <rect x="${parseFloat(lx)-26}" y="${parseFloat(ly)-23}" width="52" height="17" rx="4" fill="#c0272d"/>
+    <text x="${lx}" y="${parseFloat(ly)-11}" text-anchor="middle" font-size="10" font-weight="700" fill="white">${c.lastLabel}</text>`;
+}
+
+function renderTicketChart() {
+  const el = document.getElementById('ticket-chart-svg');
+  if (!el) return;
+  const vals = PERIOD_DATA[currentPeriod].ticket.vals, minV=1700, maxV=1960;
+  const d = makeSvgPath(vals,maxV,minV,200,44,0,2);
+  const fillD = `${d} L200,46 L0,46 Z`;
+  el.innerHTML = `<defs><linearGradient id="tg" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#c0272d" stop-opacity=".12"/>
+    <stop offset="100%" stop-color="#c0272d" stop-opacity="0"/>
+  </linearGradient></defs>
+  <path d="${fillD}" fill="url(#tg)"/>
+  <path d="${d}" fill="none" stroke="#c0272d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+}
+
+function renderTopList(containerId, items, barColor) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = items.map((item, i) => `
+    <div class="top-item">
+      <span class="top-rank ${i===0?'gold':''}">${i+1}</span>
+      <div class="top-info"><div class="top-name">${item.name}</div><div class="top-meta">${item.cat}</div></div>
+      <div class="top-bar-wrap"><div class="top-bar-fill" style="width:${Math.round(item.val/items[0].val*100)}%;background:${barColor}"></div></div>
+      <div class="top-val">${item.display}</div>
+    </div>`).join('');
+}
+
+function renderDashboard() {
+  const p = PERIOD_DATA[currentPeriod];
+  const set = (id, val) => { const e=document.getElementById(id); if(e) e.textContent=val; };
+  // KPIs
+  const k = p.kpis;
+  set('kpi-ventas', k.ventas[0]);         set('kpi-ventas-delta', k.ventas[1]);
+  set('kpi-fittings', k.fittings[0]);     set('kpi-fittings-delta', k.fittings[1]); set('kpi-fittings-sub', k.fittings[2]);
+  set('kpi-ticket', k.ticket[0]);         set('kpi-ticket-delta', k.ticket[1]);
+  set('kpi-resolucion', k.resolucion[0]); set('kpi-resolucion-delta', k.resolucion[1]);
+  set('kpi-conversion', k.conversion[0]); set('kpi-conversion-delta', k.conversion[1]);
+  set('kpi-horario', k.horario[0]);       set('kpi-horario-delta', k.horario[1]);
+  // Chart title
+  set('chart-title', p.chart.title);
+  // Split canal
+  const sp = p.split;
+  const bp = document.getElementById('split-bar-physical'), bo = document.getElementById('split-bar-online');
+  if (bp) bp.style.width = sp.physical + '%';
+  if (bo) bo.style.width = sp.online + '%';
+  set('split-pct-physical', sp.physical + '%');
+  set('split-pct-online',   sp.online + '%');
+  // Ticket sparkline
+  const t = p.ticket;
+  set('sparkline-val', t.val); set('sparkline-delta', t.delta);
+  const sm = document.getElementById('sparkline-months');
+  if (sm) sm.innerHTML = t.months.map(m => `<span class="sparkline-month">${m}</span>`).join('');
+  // Perf cells
+  set('perf-fittings-val', p.perf.fittings); set('perf-fittings-sub', p.perf.fittingsSub);
+  set('perf-nocturnas-val', p.perf.nocturnas);
+  // Top lists
+  renderTopList('top-vendidos-list',   p.vendidos,    'var(--c-brand)');
+  renderTopList('top-consultados-list', p.consultados, 'var(--c-green)');
+  // Charts
+  renderSalesChart();
+  renderTicketChart();
+}
+
+function setPeriod(btn, period) {
+  document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentPeriod = period;
+  renderDashboard();
+}
+
+renderDashboard();
 </script>
 
 <!-- Drawer overlay -->
