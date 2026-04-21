@@ -1,0 +1,2353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Depique · Panel WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ── */
+:root {
+  --c-bg:        #F5F5F4;
+  --c-surface:   #FFFFFF;
+  --c-border:    #E5E5E3;
+  --c-sidebar:   #111110;
+  --c-sidebar2:  #1A1A18;
+  --c-topbar:    #111110;
+  --c-txt:       #1A1A18;
+  --c-txt2:      #4A4A46;
+  --c-muted:     #A0A09A;
+  /* Depique brand */
+  --c-brand:     #C0272D;
+  --c-brand-dk:  #8E1A1E;
+  --c-brand-bg:  #FDF0F0;
+  --c-brand-txt: #7A1518;
+  --c-gold:      #C9A84C;
+  --c-gold-bg:   #FBF6E8;
+  /* WhatsApp (para indicadores del bot) */
+  --c-green:     #25D366;
+  --c-green-dk:  #128C7E;
+  --c-green-bg:  #E8F8EF;
+  --c-green-txt: #1A6641;
+  --c-blue:      #3B82F6;
+  --c-blue-bg:   #EFF6FF;
+  --c-amber:     #F59E0B;
+  --c-amber-bg:  #FFFBEB;
+  --c-red:       #EF4444;
+  --c-red-bg:    #FEF2F2;
+  --c-purple:    #8B5CF6;
+  --c-purple-bg: #F5F3FF;
+  --radius:      10px;
+  --radius-sm:   6px;
+  --shadow:      0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:   0 4px 16px rgba(0,0,0,.08);
+}
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { font-size:16px; }
+body {
+  font-family:'Inter',sans-serif;
+  background:var(--c-bg);
+  color:var(--c-txt);
+  line-height:1.5;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ══════════════ TOPBAR ══════════════ */
+.topbar {
+  height:54px;
+  background:var(--c-topbar);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+  flex-shrink:0;
+  z-index:100;
+}
+.topbar-left { display:flex; align-items:center; gap:12px; }
+.topbar-logo {
+  display:flex; align-items:center; gap:8px;
+}
+.logo-mark {
+  width:34px; height:34px;
+  background: var(--c-brand);
+  border-radius:7px;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.logo-mark svg { width:20px; height:20px; }
+.logo-name {
+  font-size:16px; font-weight:800; color:white;
+  letter-spacing:1px; text-transform:uppercase;
+}
+.logo-by {
+  font-size:9px; color:var(--c-gold);
+  letter-spacing:.8px; text-transform:uppercase;
+  margin-top:1px; font-weight:600;
+}
+.topbar-divider {
+  width:1px; height:24px;
+  background:rgba(255,255,255,.12);
+}
+.topbar-client {
+  font-size:12px; color:rgba(255,255,255,.5);
+  letter-spacing:.3px;
+}
+.topbar-client span {
+  color:rgba(255,255,255,.85);
+  font-weight:500;
+}
+.topbar-right { display:flex; align-items:center; gap:10px; }
+.proto-badge {
+  background:rgba(192,39,45,.15);
+  border:1px solid rgba(192,39,45,.3);
+  color:#E05055;
+  font-size:10px; font-weight:600;
+  letter-spacing:1px; text-transform:uppercase;
+  padding:3px 9px; border-radius:20px;
+}
+.sagia-badge {
+  background:rgba(201,168,76,.12);
+  border:1px solid rgba(201,168,76,.25);
+  color:var(--c-gold);
+  font-size:9px; font-weight:600;
+  letter-spacing:.8px; text-transform:uppercase;
+  padding:2px 8px; border-radius:20px;
+}
+.topbar-meta {
+  font-size:11px; color:rgba(255,255,255,.35);
+  font-family:'DM Mono',monospace;
+}
+.avatar {
+  width:30px; height:30px;
+  background:var(--c-brand);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:700; color:white;
+}
+
+/* ══════════════ SHELL ══════════════ */
+.shell { display:flex; flex:1; overflow:hidden; }
+
+/* ══════════════ SIDEBAR ══════════════ */
+.sidebar {
+  width:220px;
+  flex-shrink:0;
+  background:var(--c-sidebar2);
+  display:flex;
+  flex-direction:column;
+  padding:8px 0 16px;
+  overflow-y:auto;
+}
+
+/* ── Section group ── */
+.nav-group { margin-bottom:2px; }
+.nav-group-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 16px 4px;
+  cursor:pointer;
+  user-select:none;
+}
+.nav-group-label {
+  font-size:10px; font-weight:700;
+  color:rgba(255,255,255,.28);
+  letter-spacing:1.1px; text-transform:uppercase;
+}
+.nav-group-chevron {
+  color:rgba(255,255,255,.22);
+  transition:transform .2s;
+  flex-shrink:0;
+}
+.nav-group-chevron svg { width:12px; height:12px; display:block; }
+.nav-group.collapsed .nav-group-chevron { transform:rotate(-90deg); }
+.nav-group-body { overflow:hidden; }
+.nav-group.collapsed .nav-group-body { display:none; }
+
+/* ── Items ── */
+.nav-items { padding:2px 10px 4px; }
+.nav-item {
+  display:flex; align-items:center; gap:9px;
+  padding:8px 10px;
+  border-radius:7px;
+  cursor:pointer;
+  transition:background .12s, color .12s;
+  color:rgba(255,255,255,.5);
+  font-size:13px; font-weight:500;
+  margin-bottom:1px;
+  text-decoration:none;
+  white-space:nowrap;
+}
+.nav-item:hover { background:rgba(255,255,255,.06); color:rgba(255,255,255,.82); }
+.nav-item.active {
+  background:rgba(192,39,45,.16);
+  color:#E05055;
+}
+.nav-item svg { width:15px; height:15px; flex-shrink:0; }
+.nav-badge {
+  margin-left:auto;
+  background:var(--c-brand);
+  color:white;
+  font-size:10px; font-weight:700;
+  padding:1px 6px;
+  border-radius:20px;
+  min-width:18px;
+  text-align:center;
+}
+.nav-badge.amber { background:var(--c-amber); color:#1a1a18; }
+
+/* ── Footer ── */
+.sidebar-footer {
+  margin-top:auto;
+  padding:12px;
+  border-top:1px solid rgba(255,255,255,.07);
+}
+.sidebar-status {
+  display:flex; align-items:center; gap:8px;
+  padding:8px 10px;
+  background:rgba(37,211,102,.08);
+  border-radius:8px;
+  border:1px solid rgba(37,211,102,.15);
+}
+.status-dot {
+  width:7px; height:7px;
+  background:var(--c-green);
+  border-radius:50%;
+  flex-shrink:0;
+  box-shadow:0 0 0 2px rgba(37,211,102,.25);
+}
+.status-dot.pulse { animation:pulse 2s infinite; }
+@keyframes pulse {
+  0%,100% { box-shadow:0 0 0 2px rgba(37,211,102,.25); }
+  50% { box-shadow:0 0 0 5px rgba(37,211,102,.08); }
+}
+.status-txt {
+  font-size:11px; font-weight:500;
+  color:rgba(255,255,255,.6);
+}
+.status-txt span { color:var(--c-green); }
+
+/* ══════════════ MAIN ══════════════ */
+.main {
+  flex:1;
+  overflow-y:auto;
+  padding:24px;
+}
+
+/* ══════════════ VIEWS ══════════════ */
+.view { display:none; }
+.view.active { display:block; }
+
+/* ── Page header ── */
+.page-header {
+  display:flex; align-items:flex-start; justify-content:space-between;
+  margin-bottom:24px;
+}
+.page-title { font-size:20px; font-weight:700; color:var(--c-txt); }
+.page-sub { font-size:13px; color:var(--c-txt2); margin-top:2px; }
+.btn {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:8px 16px;
+  border-radius:8px;
+  font-size:13px; font-weight:600;
+  cursor:pointer; border:none; outline:none;
+  transition:all .15s;
+}
+.btn-primary {
+  background:var(--c-brand);
+  color:white;
+}
+.btn-primary:hover { background:var(--c-brand-dk); }
+.btn-ghost {
+  background:transparent;
+  color:var(--c-txt2);
+  border:1px solid var(--c-border);
+}
+.btn-ghost:hover { background:var(--c-bg); }
+
+/* ── Stat cards ── */
+.stats-grid {
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:16px;
+  margin-bottom:24px;
+}
+.stat-card {
+  background:var(--c-surface);
+  border-radius:var(--radius);
+  border:1px solid var(--c-border);
+  padding:18px 20px;
+  box-shadow:var(--shadow);
+}
+.stat-row { display:flex; align-items:flex-start; justify-content:space-between; }
+.stat-icon {
+  width:38px; height:38px;
+  border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+}
+.stat-icon svg { width:18px; height:18px; }
+.stat-icon.green  { background:var(--c-brand-bg); color:var(--c-brand); }
+.stat-icon.blue   { background:var(--c-blue-bg); color:var(--c-blue); }
+.stat-icon.amber  { background:var(--c-amber-bg); color:var(--c-amber); }
+.stat-icon.purple { background:var(--c-purple-bg); color:var(--c-purple); }
+.stat-val { font-size:26px; font-weight:700; margin-top:10px; }
+.stat-lbl { font-size:12px; color:var(--c-txt2); margin-top:2px; }
+.stat-delta {
+  font-size:11px; font-weight:600;
+  padding:2px 7px; border-radius:20px;
+}
+.stat-delta.up { background:var(--c-brand-bg); color:var(--c-brand); }
+.stat-delta.dn { background:var(--c-red-bg); color:var(--c-red); }
+
+/* ── Grid layout ── */
+.two-col { display:grid; grid-template-columns:1fr 360px; gap:16px; }
+
+/* ── Card ── */
+.card {
+  background:var(--c-surface);
+  border-radius:var(--radius);
+  border:1px solid var(--c-border);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.card-head {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 18px;
+  border-bottom:1px solid var(--c-border);
+}
+.card-title { font-size:13px; font-weight:600; }
+.card-action {
+  font-size:12px; color:var(--c-brand);
+  cursor:pointer; font-weight:500;
+}
+
+/* ── Conversation list ── */
+.conv-list { }
+.conv-item {
+  display:flex; align-items:center; gap:12px;
+  padding:13px 18px;
+  border-bottom:1px solid var(--c-border);
+  cursor:pointer;
+  transition:background .1s;
+}
+.conv-item:last-child { border-bottom:none; }
+.conv-item:hover { background:var(--c-bg); }
+.conv-item.active { background:#fdf3f3; }
+.conv-avatar {
+  width:38px; height:38px;
+  border-radius:50%;
+  background:var(--c-green-bg);
+  display:flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:14px;
+  color:var(--c-green-dk);
+  flex-shrink:0;
+  position:relative;
+}
+.conv-avatar .online-dot {
+  position:absolute; bottom:1px; right:1px;
+  width:9px; height:9px;
+  background:var(--c-green);
+  border-radius:50%;
+  border:2px solid white;
+}
+.conv-info { flex:1; min-width:0; }
+.conv-name { font-size:13px; font-weight:600; }
+.conv-last {
+  font-size:12px; color:var(--c-txt2);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  margin-top:1px;
+}
+.conv-meta { display:flex; flex-direction:column; align-items:flex-end; gap:4px; }
+.conv-time { font-size:11px; color:var(--c-muted); }
+.conv-unread {
+  background:var(--c-green);
+  color:white; font-size:10px; font-weight:700;
+  width:18px; height:18px;
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+}
+
+/* ── Activity feed ── */
+.activity-list { padding:4px 0; }
+.activity-item {
+  display:flex; align-items:flex-start; gap:10px;
+  padding:10px 18px;
+  border-bottom:1px solid var(--c-border);
+  font-size:12px;
+}
+.activity-item:last-child { border-bottom:none; }
+.activity-dot {
+  width:7px; height:7px; border-radius:50%;
+  margin-top:5px; flex-shrink:0;
+}
+.activity-dot.green  { background:var(--c-green); }
+.activity-dot.blue   { background:var(--c-blue); }
+.activity-dot.amber  { background:var(--c-amber); }
+.activity-txt { color:var(--c-txt2); line-height:1.5; }
+.activity-txt strong { color:var(--c-txt); font-weight:600; }
+.activity-time { margin-left:auto; color:var(--c-muted); white-space:nowrap; font-size:11px; padding-left:8px; }
+
+/* ══════════════ CONVERSACIONES VIEW ══════════════ */
+.chat-layout {
+  display:grid;
+  grid-template-columns:300px 1fr;
+  gap:0;
+  height:calc(100vh - 54px - 48px - 24px);
+  background:var(--c-surface);
+  border-radius:var(--radius);
+  border:1px solid var(--c-border);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.chat-sidebar {
+  border-right:1px solid var(--c-border);
+  display:flex; flex-direction:column;
+}
+.chat-search {
+  padding:14px;
+  border-bottom:1px solid var(--c-border);
+}
+.search-input {
+  width:100%;
+  padding:8px 12px 8px 34px;
+  border:1px solid var(--c-border);
+  border-radius:8px;
+  font-size:13px;
+  background:var(--c-bg);
+  outline:none;
+  font-family:'Inter',sans-serif;
+  position:relative;
+}
+.search-wrap { position:relative; }
+.search-icon {
+  position:absolute; left:10px; top:50%;
+  transform:translateY(-50%);
+  color:var(--c-muted);
+  pointer-events:none;
+}
+.chat-list { flex:1; overflow-y:auto; }
+.chat-item {
+  display:flex; align-items:center; gap:10px;
+  padding:12px 14px;
+  border-bottom:1px solid var(--c-border);
+  cursor:pointer;
+  transition:background .1s;
+}
+.chat-item:hover { background:var(--c-bg); }
+.chat-item.active { background:#fdf3f3; border-right:2px solid var(--c-brand); }
+.chat-av {
+  width:42px; height:42px; border-radius:50%;
+  background:var(--c-green-bg);
+  display:flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:15px; color:var(--c-green-dk);
+  flex-shrink:0;
+}
+.chat-av.purple-av { background:var(--c-purple-bg); color:var(--c-purple); }
+.chat-av.blue-av { background:var(--c-blue-bg); color:var(--c-blue); }
+.chat-av.amber-av { background:var(--c-amber-bg); color:var(--c-amber); }
+.chat-info { flex:1; min-width:0; }
+.chat-name { font-size:13px; font-weight:600; }
+.chat-preview {
+  font-size:12px; color:var(--c-txt2);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:1px;
+}
+.chat-preview.bot { color:var(--c-green-dk); }
+.chat-side { display:flex; flex-direction:column; align-items:flex-end; gap:3px; }
+.chat-time { font-size:11px; color:var(--c-muted); }
+.unread-badge {
+  background:var(--c-green); color:white;
+  font-size:10px; font-weight:700;
+  min-width:18px; height:18px; border-radius:9px;
+  display:flex; align-items:center; justify-content:center;
+  padding:0 4px;
+}
+
+/* ── Chat window ── */
+.chat-window {
+  display:flex; flex-direction:column;
+  background:#EFE8DD;
+}
+.chat-header {
+  background:var(--c-surface);
+  padding:10px 16px;
+  border-bottom:1px solid var(--c-border);
+  display:flex; align-items:center; gap:10px;
+}
+.chat-header-av {
+  width:38px; height:38px; border-radius:50%;
+  background:var(--c-green-bg);
+  display:flex; align-items:center; justify-content:center;
+  font-weight:700; color:var(--c-green-dk);
+}
+.chat-header-info { flex:1; }
+.chat-header-name { font-size:14px; font-weight:600; }
+.chat-header-sub { font-size:12px; color:var(--c-txt2); }
+.chat-header-actions { display:flex; gap:8px; }
+.icon-btn {
+  width:32px; height:32px; border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:var(--c-txt2);
+  transition:background .1s;
+  border:none; background:transparent;
+}
+.icon-btn:hover { background:var(--c-bg); }
+.icon-btn svg { width:16px; height:16px; }
+
+.chat-messages {
+  flex:1; overflow-y:auto;
+  padding:16px;
+  display:flex; flex-direction:column; gap:4px;
+}
+.msg-row { display:flex; }
+.msg-row.bot { justify-content:flex-start; }
+.msg-row.user { justify-content:flex-end; }
+.msg-bubble {
+  max-width:60%;
+  padding:8px 12px;
+  border-radius:8px;
+  font-size:13px; line-height:1.5;
+  box-shadow:0 1px 2px rgba(0,0,0,.1);
+  position:relative;
+}
+.msg-row.bot .msg-bubble {
+  background:white;
+  border-radius:0 8px 8px 8px;
+}
+.msg-row.user .msg-bubble {
+  background:#D9FDD3;
+  border-radius:8px 0 8px 8px;
+}
+.msg-time {
+  font-size:10px; color:var(--c-muted);
+  text-align:right; margin-top:3px;
+  display:flex; align-items:center; justify-content:flex-end; gap:3px;
+}
+.msg-tag {
+  display:inline-block;
+  background:var(--c-green-bg);
+  color:var(--c-green-dk);
+  font-size:10px; font-weight:600;
+  padding:1px 6px; border-radius:4px;
+  margin-bottom:4px;
+}
+.date-separator {
+  text-align:center; margin:12px 0;
+}
+.date-separator span {
+  background:rgba(255,255,255,.85);
+  padding:3px 12px; border-radius:20px;
+  font-size:11px; color:var(--c-txt2);
+  box-shadow:0 1px 2px rgba(0,0,0,.07);
+}
+.chat-input-bar {
+  background:var(--c-surface);
+  padding:12px 14px;
+  border-top:1px solid var(--c-border);
+  display:flex; align-items:center; gap:10px;
+}
+.bot-indicator {
+  display:flex; align-items:center; gap:6px;
+  background:var(--c-green-bg);
+  border:1px solid rgba(37,211,102,.2);
+  padding:6px 12px; border-radius:8px;
+  font-size:12px; font-weight:500; color:var(--c-green-dk);
+  flex:1;
+}
+.bot-indicator svg { width:14px; height:14px; }
+.override-btn {
+  padding:6px 12px;
+  background:transparent; border:1px solid var(--c-border);
+  border-radius:8px; font-size:12px; font-weight:500;
+  color:var(--c-txt2); cursor:pointer;
+  transition:all .1s;
+}
+.override-btn:hover { background:var(--c-bg); }
+
+/* ══════════════ CATALOGO VIEW ══════════════ */
+.catalog-grid {
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:16px;
+}
+.product-card {
+  background:var(--c-surface);
+  border-radius:var(--radius);
+  border:1px solid var(--c-border);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+  transition:box-shadow .15s;
+}
+.product-card:hover { box-shadow:var(--shadow-md); }
+.product-img {
+  height:140px;
+  background:linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  display:flex; align-items:center; justify-content:center;
+  font-size:42px;
+  border-bottom:1px solid var(--c-border);
+}
+.product-body { padding:14px 16px; }
+.product-name { font-size:14px; font-weight:600; }
+.product-desc { font-size:12px; color:var(--c-txt2); margin-top:3px; line-height:1.4; }
+.product-price {
+  font-size:18px; font-weight:700;
+  color:var(--c-green-dk); margin-top:10px;
+}
+.product-footer {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 16px;
+  border-top:1px solid var(--c-border);
+  background:var(--c-bg);
+}
+.product-stock {
+  font-size:11px; font-weight:600;
+  padding:2px 8px; border-radius:20px;
+}
+.product-stock.ok { background:var(--c-green-bg); color:var(--c-green-txt); }
+.product-stock.low { background:var(--c-amber-bg); color:#92400e; }
+.product-actions { display:flex; gap:6px; }
+.product-btn {
+  padding:5px 10px;
+  border-radius:6px; font-size:11px; font-weight:600;
+  cursor:pointer; border:none;
+}
+.product-btn.edit { background:var(--c-blue-bg); color:var(--c-blue); }
+.product-btn.del { background:var(--c-red-bg); color:var(--c-red); }
+
+/* ══════════════ CONFIG VIEW ══════════════ */
+.config-layout {
+  display:grid;
+  grid-template-columns:220px 1fr;
+  gap:16px;
+}
+.config-nav {
+  background:var(--c-surface);
+  border-radius:var(--radius);
+  border:1px solid var(--c-border);
+  padding:8px;
+  height:fit-content;
+}
+.config-nav-item {
+  display:flex; align-items:center; gap:8px;
+  padding:9px 10px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:13px; font-weight:500;
+  color:var(--c-txt2);
+  transition:background .1s;
+  margin-bottom:2px;
+}
+.config-nav-item:hover { background:var(--c-bg); color:var(--c-txt); }
+.config-nav-item.active { background:var(--c-brand-bg); color:var(--c-brand); }
+.config-nav-item svg { width:15px; height:15px; flex-shrink:0; }
+
+.config-panel {
+  background:var(--c-surface);
+  border-radius:var(--radius);
+  border:1px solid var(--c-border);
+  padding:24px;
+}
+.config-section { margin-bottom:28px; }
+.config-section:last-child { margin-bottom:0; }
+.config-section-title {
+  font-size:13px; font-weight:700;
+  margin-bottom:14px;
+  padding-bottom:10px;
+  border-bottom:1px solid var(--c-border);
+}
+.field-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+.field-row.single { grid-template-columns:1fr; }
+.field { display:flex; flex-direction:column; gap:5px; }
+.field label { font-size:12px; font-weight:600; color:var(--c-txt2); }
+.field input, .field select, .field textarea {
+  padding:9px 12px;
+  border:1px solid var(--c-border);
+  border-radius:8px;
+  font-size:13px;
+  font-family:'Inter',sans-serif;
+  color:var(--c-txt);
+  background:var(--c-surface);
+  outline:none;
+  transition:border-color .15s;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color:var(--c-brand);
+}
+.field textarea { resize:vertical; min-height:90px; line-height:1.5; }
+
+.toggle-row {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 0;
+  border-bottom:1px solid var(--c-border);
+}
+.toggle-row:last-child { border-bottom:none; }
+.toggle-info .toggle-name { font-size:13px; font-weight:500; }
+.toggle-info .toggle-desc { font-size:12px; color:var(--c-txt2); margin-top:2px; }
+.toggle {
+  width:40px; height:22px;
+  background:var(--c-border);
+  border-radius:11px;
+  position:relative; cursor:pointer;
+  transition:background .2s;
+  flex-shrink:0;
+}
+.toggle.on { background:var(--c-brand); }
+.toggle::after {
+  content:'';
+  position:absolute;
+  top:3px; left:3px;
+  width:16px; height:16px;
+  background:white;
+  border-radius:50%;
+  transition:transform .2s;
+  box-shadow:0 1px 3px rgba(0,0,0,.15);
+}
+.toggle.on::after { transform:translateX(18px); }
+
+.save-bar {
+  display:flex; justify-content:flex-end; gap:10px;
+  margin-top:24px;
+  padding-top:16px;
+  border-top:1px solid var(--c-border);
+}
+
+/* ══════════════ RESPUESTAS VIEW ══════════════ */
+.responses-list { }
+.response-card {
+  background:var(--c-surface);
+  border:1px solid var(--c-border);
+  border-radius:var(--radius);
+  padding:16px 18px;
+  margin-bottom:12px;
+  box-shadow:var(--shadow);
+}
+.response-trigger {
+  display:flex; align-items:center; gap:8px; margin-bottom:8px;
+}
+.trigger-chip {
+  background:var(--c-purple-bg);
+  color:var(--c-purple);
+  font-size:12px; font-weight:600;
+  padding:3px 10px; border-radius:20px;
+  font-family:'DM Mono',monospace;
+}
+.response-text {
+  font-size:13px; color:var(--c-txt2);
+  line-height:1.5;
+  background:var(--c-bg);
+  padding:10px 12px;
+  border-radius:8px;
+  border-left:3px solid var(--c-green);
+}
+.response-footer {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-top:10px;
+}
+.response-meta { font-size:11px; color:var(--c-muted); }
+.response-acts { display:flex; gap:6px; }
+.tag { display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:600; padding:2px 8px; border-radius:20px; }
+.tag.green { background:var(--c-green-bg); color:var(--c-green-txt); }
+.tag.blue { background:var(--c-blue-bg); color:var(--c-blue); }
+
+/* ══════════════ TIENDAS VIEW ══════════════ */
+.stores-toolbar {
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:18px;
+  flex-wrap:wrap;
+}
+.filter-tabs {
+  display:flex; gap:4px;
+  background:var(--c-surface);
+  border:1px solid var(--c-border);
+  border-radius:10px;
+  padding:4px;
+}
+.filter-tab {
+  padding:7px 14px;
+  border-radius:7px;
+  font-size:12px; font-weight:600;
+  color:var(--c-txt2);
+  cursor:pointer;
+  border:none; background:transparent;
+  transition:all .15s;
+  display:inline-flex; align-items:center; gap:6px;
+}
+.filter-tab:hover { color:var(--c-txt); }
+.filter-tab.active {
+  background:var(--c-brand-bg);
+  color:var(--c-brand);
+}
+.filter-tab .count {
+  font-size:10px; font-weight:700;
+  background:rgba(0,0,0,.08);
+  padding:1px 6px; border-radius:20px;
+}
+.filter-tab.active .count {
+  background:var(--c-brand);
+  color:white;
+}
+.toolbar-search {
+  flex:1; max-width:280px;
+  margin-left:auto;
+}
+
+/* ── Period selector ── */
+.period-selector {
+  display:flex; gap:4px;
+  background:var(--c-surface);
+  border:1px solid var(--c-border);
+  border-radius:8px;
+  padding:3px;
+}
+.period-btn {
+  padding:6px 12px;
+  border-radius:6px;
+  font-size:12px; font-weight:600;
+  color:var(--c-txt2);
+  cursor:pointer;
+  border:none; background:transparent;
+  transition:all .12s;
+}
+.period-btn:hover { color:var(--c-txt); }
+.period-btn.active {
+  background:var(--c-txt);
+  color:white;
+}
+
+/* ── Stores Table ── */
+.stores-table-wrap {
+  background:var(--c-surface);
+  border-radius:var(--radius);
+  border:1px solid var(--c-border);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  margin-bottom:24px;
+}
+.stores-table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+}
+.stores-table thead th {
+  background:var(--c-bg);
+  padding:11px 14px;
+  text-align:left;
+  font-size:11px;
+  font-weight:700;
+  color:var(--c-txt2);
+  text-transform:uppercase;
+  letter-spacing:.6px;
+  border-bottom:1px solid var(--c-border);
+  white-space:nowrap;
+}
+.stores-table thead th.num { text-align:right; }
+.stores-table tbody td {
+  padding:13px 14px;
+  border-bottom:1px solid var(--c-border);
+  color:var(--c-txt);
+  vertical-align:middle;
+}
+.stores-table tbody tr:last-child td { border-bottom:none; }
+.stores-table tbody tr { transition:background .1s; }
+.stores-table tbody tr:hover { background:var(--c-bg); }
+.stores-table td.num {
+  text-align:right;
+  font-family:'DM Mono',monospace;
+  font-weight:500;
+}
+.store-cell {
+  display:flex; align-items:center; gap:10px;
+}
+.store-dot {
+  width:8px; height:8px; border-radius:50%;
+  flex-shrink:0;
+}
+.store-dot.propia     { background:var(--c-brand); }
+.store-dot.proshop    { background:var(--c-green); }
+.store-dot.academy    { background:var(--c-purple); }
+.store-dot.franquicia { background:var(--c-gold); }
+.store-dot.ecommerce  { background:var(--c-blue); }
+.store-cell-main {
+  display:flex; flex-direction:column;
+}
+.store-cell-name {
+  font-weight:600;
+  color:var(--c-txt);
+}
+.store-cell-loc {
+  font-size:11px;
+  color:var(--c-muted);
+  margin-top:1px;
+}
+.status-pill {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:11px; font-weight:600;
+  padding:3px 9px;
+  border-radius:20px;
+}
+.status-pill::before {
+  content:''; width:6px; height:6px;
+  border-radius:50%;
+}
+.status-pill.open {
+  background:var(--c-green-bg);
+  color:var(--c-green-txt);
+}
+.status-pill.open::before { background:var(--c-green); }
+.status-pill.closed {
+  background:var(--c-bg);
+  color:var(--c-muted);
+}
+.status-pill.closed::before { background:var(--c-muted); }
+.status-pill.online {
+  background:var(--c-blue-bg);
+  color:var(--c-blue);
+}
+.status-pill.online::before { background:var(--c-blue); }
+
+.store-badge { font-size:10px; font-weight:700; padding:3px 9px; border-radius:20px; letter-spacing:.4px; text-transform:uppercase; }
+.store-badge.propia     { background:var(--c-brand-bg); color:var(--c-brand); }
+.store-badge.proshop    { background:var(--c-green-bg); color:var(--c-green-txt); }
+.store-badge.academy    { background:var(--c-purple-bg); color:var(--c-purple); }
+.store-badge.franquicia { background:var(--c-gold-bg); color:#806408; }
+.store-badge.ecommerce  { background:var(--c-blue-bg); color:var(--c-blue); }
+
+.stores-table tbody tr.ecommerce-row { background:var(--c-blue-bg); }
+.stores-table tbody tr.ecommerce-row:hover { background:#e0eeff; }
+.stores-table tbody tr.ecommerce-row td { border-bottom:2px solid var(--c-border); }
+
+.svc-dots {
+  display:flex; gap:4px;
+}
+.svc-dot {
+  width:22px; height:22px;
+  border-radius:6px;
+  display:inline-flex; align-items:center; justify-content:center;
+  font-size:10px; font-weight:700;
+  background:var(--c-bg);
+  color:var(--c-muted);
+  border:1px solid var(--c-border);
+}
+.svc-dot.on {
+  background:var(--c-green-bg);
+  color:var(--c-green-txt);
+  border-color:rgba(37,211,102,.25);
+}
+
+.mini-trend {
+  display:inline-block;
+  font-size:10px; font-weight:700;
+  padding:2px 6px;
+  border-radius:4px;
+  margin-left:6px;
+  vertical-align:middle;
+}
+.mini-trend.up   { background:var(--c-green-bg); color:var(--c-green-txt); }
+.mini-trend.dn   { background:var(--c-red-bg); color:var(--c-red); }
+.mini-trend.flat { background:var(--c-bg); color:var(--c-muted); }
+
+.row-btn {
+  padding:6px 12px;
+  border-radius:7px;
+  font-size:12px; font-weight:600;
+  cursor:pointer;
+  border:1px solid var(--c-border);
+  background:var(--c-surface);
+  color:var(--c-txt2);
+  transition:all .12s;
+  display:inline-flex; align-items:center; gap:5px;
+}
+.row-btn:hover {
+  background:var(--c-brand-bg);
+  border-color:var(--c-brand);
+  color:var(--c-brand);
+}
+.row-btn svg { width:12px; height:12px; }
+
+/* ── Sortable table headers ── */
+.stores-table thead th.sortable { cursor:pointer; user-select:none; }
+.stores-table thead th.sortable:hover { color:var(--c-txt); background:#ECEAE6; }
+.sort-icon { margin-left:4px; opacity:.3; font-size:9px; }
+.stores-table thead th.sort-asc .sort-icon,
+.stores-table thead th.sort-desc .sort-icon { opacity:1; color:var(--c-brand); }
+
+/* ── Ficha drawer ── */
+.drawer-overlay {
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.35);
+  z-index:200;
+  opacity:0; pointer-events:none;
+  transition:opacity .25s;
+}
+.drawer-overlay.open { opacity:1; pointer-events:all; }
+.drawer {
+  position:fixed; top:0; right:0; bottom:0;
+  width:460px;
+  background:var(--c-surface);
+  box-shadow:-8px 0 32px rgba(0,0,0,.12);
+  z-index:201;
+  display:flex; flex-direction:column;
+  transform:translateX(100%);
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
+}
+.drawer.open { transform:translateX(0); }
+.drawer-topbar {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px 20px;
+  border-bottom:1px solid var(--c-border);
+  flex-shrink:0;
+}
+.drawer-title { font-size:15px; font-weight:700; }
+.drawer-close {
+  width:30px; height:30px; border-radius:7px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; border:none; background:transparent;
+  color:var(--c-txt2); font-size:20px; line-height:1;
+  transition:background .1s;
+}
+.drawer-close:hover { background:var(--c-bg); color:var(--c-txt); }
+.drawer-body { flex:1; overflow-y:auto; padding:20px; }
+.drawer-type-strip { height:3px; border-radius:2px; margin-bottom:20px; }
+.drawer-type-strip.propia     { background:var(--c-brand); }
+.drawer-type-strip.proshop    { background:var(--c-green); }
+.drawer-type-strip.academy    { background:var(--c-purple); }
+.drawer-type-strip.franquicia { background:var(--c-gold); }
+.drawer-type-strip.ecommerce  { background:var(--c-blue); }
+.drawer-section { margin-bottom:22px; }
+.drawer-section-title {
+  font-size:10px; font-weight:700; text-transform:uppercase;
+  letter-spacing:1px; color:var(--c-muted);
+  margin-bottom:10px; padding-bottom:6px;
+  border-bottom:1px solid var(--c-border);
+}
+.drawer-field {
+  display:flex; align-items:flex-start; gap:10px;
+  font-size:13px; color:var(--c-txt2);
+  margin-bottom:8px; line-height:1.5;
+}
+.drawer-field svg { width:14px; height:14px; flex-shrink:0; margin-top:2px; color:var(--c-muted); }
+.drawer-field a { color:var(--c-brand); text-decoration:none; }
+.drawer-field a:hover { text-decoration:underline; }
+.drawer-hours { background:var(--c-bg); border-radius:8px; padding:10px 12px; font-size:12px; line-height:1.9; }
+.drawer-hours-row { display:flex; justify-content:space-between; }
+.drawer-hours-row span:first-child { font-weight:500; color:var(--c-txt); }
+.drawer-hours-row.closed span:last-child { color:var(--c-red); font-weight:600; }
+.drawer-kpis { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.drawer-kpi { background:var(--c-bg); border-radius:8px; padding:12px; text-align:center; }
+.drawer-kpi-val { font-size:18px; font-weight:700; }
+.drawer-kpi-lbl { font-size:11px; color:var(--c-muted); margin-top:2px; }
+.drawer-services { display:flex; flex-wrap:wrap; gap:6px; }
+.drawer-footer {
+  padding:14px 20px;
+  border-top:1px solid var(--c-border);
+  display:flex; gap:8px; flex-shrink:0;
+}
+
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--c-border); border-radius:4px; }
+</style>
+</head>
+<body>
+
+<!-- ══ TOPBAR ══ -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="white">
+          <path d="M12 2L4 5v6c0 5.25 3.5 10.15 8 11.35C16.5 21.15 20 16.25 20 11V5L12 2z" fill="rgba(255,255,255,0.15)" stroke="white" stroke-width="1.5"/>
+          <text x="12" y="15.5" text-anchor="middle" font-size="8" font-weight="900" font-family="Inter,sans-serif" fill="white">dp</text>
+        </svg>
+      </div>
+      <div>
+        <div class="logo-name">Depique</div>
+        <div class="logo-by">FIT YOUR GOLF</div>
+      </div>
+    </div>
+    <div class="topbar-divider"></div>
+    <span class="sagia-badge">powered by SAGIA</span>
+  </div>
+  <div class="topbar-right">
+    <span class="proto-badge">POC</span>
+    <span class="topbar-meta">v0.1.0</span>
+    <div class="avatar">EN</div>
+  </div>
+</div>
+
+<!-- ══ SHELL ══ -->
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+
+    <!-- AGENTE -->
+    <div class="nav-group" id="group-agente">
+      <div class="nav-group-header" onclick="toggleGroup('agente')">
+        <span class="nav-group-label">Agente</span>
+        <span class="nav-group-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+      <div class="nav-group-body">
+        <div class="nav-items">
+          <a class="nav-item active" onclick="navigate('dashboard')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            Dashboard
+          </a>
+          <a class="nav-item" onclick="navigate('conversaciones')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Conversaciones
+            <span class="nav-badge">8</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- GESTIÓN COMERCIAL -->
+    <div class="nav-group" id="group-gestion">
+      <div class="nav-group-header" onclick="toggleGroup('gestion')">
+        <span class="nav-group-label">Gestión Comercial</span>
+        <span class="nav-group-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+      <div class="nav-group-body">
+        <div class="nav-items">
+          <a class="nav-item" onclick="navigate('catalogo')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            Productos
+          </a>
+            Categorías
+          </a>
+          <a class="nav-item" onclick="navigate('catalogo')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Clientes
+          </a>
+          <a class="nav-item" onclick="navigate('catalogo')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            Pedidos
+          </a>
+          <a class="nav-item" onclick="navigate('respuestas')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Marketing
+            <span class="nav-badge amber">3</span>
+          </a>
+          <a class="nav-item" onclick="navigate('catalogo')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+            Leads
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- RED FÍSICA -->
+    <!-- TIENDAS -->
+    <div class="nav-group" id="group-red">
+      <div class="nav-group-header" onclick="toggleGroup('red')">
+        <span class="nav-group-label">Tiendas</span>
+        <span class="nav-group-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+      <div class="nav-group-body">
+        <div class="nav-items">
+          <a class="nav-item" onclick="navigate('tiendas')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v11a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9"/><path d="M3 9h18"/><path d="M9 21v-6h6v6"/></svg>
+            Red de tiendas
+          </a>
+          <a class="nav-item" onclick="navigate('tiendas')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            Fittings
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONFIGURACIÓN -->
+    <div class="nav-group" id="group-config">
+      <div class="nav-group-header" onclick="toggleGroup('config')">
+        <span class="nav-group-label">Configuración</span>
+        <span class="nav-group-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+      <div class="nav-group-body">
+        <div class="nav-items">
+          <a class="nav-item" onclick="navigate('configuracion')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            Operadores
+          </a>
+          <a class="nav-item" onclick="navigate('respuestas')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+            Instrucciones
+          </a>
+          <a class="nav-item" onclick="navigate('catalogo')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Ajustes de catálogo
+          </a>
+          <a class="nav-item" onclick="navigate('configuracion')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            Ajustes Generales
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-status">
+        <div class="status-dot pulse"></div>
+        <div class="status-txt">Bot <span>activo</span> · WhatsApp</div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- ── DASHBOARD ── -->
+    <div class="view active" id="view-dashboard">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Dashboard</div>
+          <div class="page-sub">Resumen de actividad del bot de WhatsApp · hoy</div>
+        </div>
+        <button class="btn btn-ghost">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+          Actualizar
+        </button>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-row">
+            <div class="stat-icon green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <span class="stat-delta up">+12%</span>
+          </div>
+          <div class="stat-val">124</div>
+          <div class="stat-lbl">Conversaciones hoy</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-row">
+            <div class="stat-icon blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <span class="stat-delta up">+5</span>
+          </div>
+          <div class="stat-val">47</div>
+          <div class="stat-lbl">Usuarios únicos</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-row">
+            <div class="stat-icon amber">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            </div>
+            <span class="stat-delta up">+23%</span>
+          </div>
+          <div class="stat-val">38</div>
+          <div class="stat-lbl">Consultas de productos</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-row">
+            <div class="stat-icon purple">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <span class="stat-delta up">96%</span>
+          </div>
+          <div class="stat-val">1.8s</div>
+          <div class="stat-lbl">Tiempo de respuesta</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Conversaciones activas</div>
+            <span class="card-action" onclick="navigate('conversaciones')">Ver todas →</span>
+          </div>
+          <div class="conv-list">
+            <div class="conv-item active" onclick="navigate('conversaciones')">
+              <div class="conv-avatar">MC<div class="online-dot"></div></div>
+              <div class="conv-info">
+                <div class="conv-name">Marcos C.</div>
+                <div class="conv-last">¿El driver viene en loft 10.5°?</div>
+              </div>
+              <div class="conv-meta">
+                <div class="conv-time">hace 2m</div>
+                <div class="conv-unread">2</div>
+              </div>
+            </div>
+            <div class="conv-item" onclick="navigate('conversaciones')">
+              <div class="conv-avatar" style="background:#e0ebff;color:#3b6fd4">JR</div>
+              <div class="conv-info">
+                <div class="conv-name">Julia R.</div>
+                <div class="conv-last">Bot: ¡Sí! El Paradym tiene loft 9°, 10.5° y 12°.</div>
+              </div>
+              <div class="conv-meta">
+                <div class="conv-time">hace 8m</div>
+              </div>
+            </div>
+            <div class="conv-item" onclick="navigate('conversaciones')">
+              <div class="conv-avatar" style="background:#f5e0ff;color:#8b3dd4">LS</div>
+              <div class="conv-info">
+                <div class="conv-name">Luis S.</div>
+                <div class="conv-last">¿Hacen fitting para hierros?</div>
+              </div>
+              <div class="conv-meta">
+                <div class="conv-time">hace 15m</div>
+                <div class="conv-unread">1</div>
+              </div>
+            </div>
+            <div class="conv-item" onclick="navigate('conversaciones')">
+              <div class="conv-avatar" style="background:#fff3e0;color:#e65100">AR</div>
+              <div class="conv-info">
+                <div class="conv-name">Andrés R.</div>
+                <div class="conv-last">Perfecto, reservo el turno de fitting.</div>
+              </div>
+              <div class="conv-meta">
+                <div class="conv-time">hace 22m</div>
+              </div>
+            </div>
+            <div class="conv-item" onclick="navigate('conversaciones')">
+              <div class="conv-avatar">SP</div>
+              <div class="conv-info">
+                <div class="conv-name">Sofía P.</div>
+                <div class="conv-last">¿Tienen tallas junior en ropa?</div>
+              </div>
+              <div class="conv-meta">
+                <div class="conv-time">hace 35m</div>
+                <div class="conv-unread">4</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Actividad reciente</div>
+          </div>
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="activity-dot green"></div>
+              <div class="activity-txt"><strong>Marcos C.</strong> inició una conversación nueva</div>
+              <div class="activity-time">12:32</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot blue"></div>
+              <div class="activity-txt">Bot respondió consulta del <em>Driver Callaway Paradym</em></div>
+              <div class="activity-time">12:29</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot amber"></div>
+              <div class="activity-txt"><strong>Luis S.</strong> consultó disponibilidad de <em>fitting de hierros</em></div>
+              <div class="activity-time">12:15</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot green"></div>
+              <div class="activity-txt">Se actualizó el catálogo — <em>Polos BRAX temporada</em></div>
+              <div class="activity-time">11:50</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot blue"></div>
+              <div class="activity-txt">Bot derivó consulta de fitting a asesor humano</div>
+              <div class="activity-time">11:38</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot amber"></div>
+              <div class="activity-txt">Respuesta editada: <em>consulta_fitting</em></div>
+              <div class="activity-time">11:10</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot green"></div>
+              <div class="activity-txt"><strong>Sofía P.</strong> consultó ropa junior</div>
+              <div class="activity-time">10:58</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CONVERSACIONES ── -->
+    <div class="view" id="view-conversaciones">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Conversaciones</div>
+          <div class="page-sub">Historial de mensajes de WhatsApp</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost">Exportar</button>
+        </div>
+      </div>
+      <div class="chat-layout">
+        <!-- lista -->
+        <div class="chat-sidebar">
+          <div class="chat-search">
+            <div class="search-wrap">
+              <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input class="search-input" placeholder="Buscar conversación...">
+            </div>
+          </div>
+          <div class="chat-list">
+            <div class="chat-item active">
+              <div class="chat-av">MC</div>
+              <div class="chat-info">
+                <div class="chat-name">María C.</div>
+                <div class="chat-preview">¿El producto viene en azul?</div>
+              </div>
+              <div class="chat-side">
+                <div class="chat-time">12:32</div>
+                <div class="unread-badge">2</div>
+              </div>
+            </div>
+            <div class="chat-item">
+              <div class="chat-av blue-av">JR</div>
+              <div class="chat-info">
+                <div class="chat-name">Juan R.</div>
+                <div class="chat-preview bot">🤖 ¡Claro! Tenemos stock...</div>
+              </div>
+              <div class="chat-side">
+                <div class="chat-time">12:24</div>
+              </div>
+            </div>
+            <div class="chat-item">
+              <div class="chat-av purple-av">LS</div>
+              <div class="chat-info">
+                <div class="chat-name">Laura S.</div>
+                <div class="chat-preview">¿Hacen envíos a Córdoba?</div>
+              </div>
+              <div class="chat-side">
+                <div class="chat-time">12:17</div>
+                <div class="unread-badge">1</div>
+              </div>
+            </div>
+            <div class="chat-item">
+              <div class="chat-av amber-av">AR</div>
+              <div class="chat-info">
+                <div class="chat-name">Andrés R.</div>
+                <div class="chat-preview bot">🤖 ¡Con gusto! Aquí la info...</div>
+              </div>
+              <div class="chat-side">
+                <div class="chat-time">12:10</div>
+              </div>
+            </div>
+            <div class="chat-item">
+              <div class="chat-av">SP</div>
+              <div class="chat-info">
+                <div class="chat-name">Sofía P.</div>
+                <div class="chat-preview">¿Cuánto tarda el envío?</div>
+              </div>
+              <div class="chat-side">
+                <div class="chat-time">11:58</div>
+                <div class="unread-badge">4</div>
+              </div>
+            </div>
+            <div class="chat-item">
+              <div class="chat-av" style="background:#e0fff4;color:#0d6e4a">CM</div>
+              <div class="chat-info">
+                <div class="chat-name">Carlos M.</div>
+                <div class="chat-preview bot">🤖 Los envíos demoran entre...</div>
+              </div>
+              <div class="chat-side">
+                <div class="chat-time">11:40</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ventana de chat -->
+        <div class="chat-window">
+          <div class="chat-header">
+            <div class="chat-header-av">MC</div>
+            <div class="chat-header-info">
+              <div class="chat-header-name">Marcos C. · +34 612 345 678</div>
+              <div class="chat-header-sub">Última actividad: hace 2 minutos</div>
+            </div>
+            <div class="chat-header-actions">
+              <button class="icon-btn" title="Perfil">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </button>
+              <button class="icon-btn" title="Buscar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="chat-messages">
+            <div class="date-separator"><span>Hoy</span></div>
+
+            <div class="msg-row user">
+              <div class="msg-bubble">
+                Hola! quiero saber si tienen el driver Callaway Paradym
+                <div class="msg-time">12:28</div>
+              </div>
+            </div>
+
+            <div class="msg-row bot">
+              <div class="msg-bubble">
+                <div class="msg-tag">🤖 Bot</div>
+                ¡Hola! Bienvenido a Depique 👋 Sí, tenemos el Callaway Paradym Ai Smoke disponible. Es uno de nuestros drivers más pedidos. ¿Te cuento los lofts y shafts disponibles?
+                <div class="msg-time">12:28</div>
+              </div>
+            </div>
+
+            <div class="msg-row user">
+              <div class="msg-bubble">
+                Sí, y el precio también
+                <div class="msg-time">12:30</div>
+              </div>
+            </div>
+
+            <div class="msg-row bot">
+              <div class="msg-bubble">
+                <div class="msg-tag">🤖 Bot</div>
+                El Callaway Paradym Ai Smoke está a <strong>€549</strong>. Disponible en loft 9°, 10.5° y 12°, con shaft estándar Project X Cypher. También podemos hacer un <em>fitting personalizado</em> para elegir el shaft ideal según tu swing. ¿Te interesa?
+                <div class="msg-time">12:31</div>
+              </div>
+            </div>
+
+            <div class="msg-row user">
+              <div class="msg-bubble">
+                ¿El driver viene en loft 10.5°?
+                <div class="msg-time">12:32</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chat-input-bar">
+            <div class="bot-indicator">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              El bot está respondiendo automáticamente
+            </div>
+            <button class="override-btn">Tomar control</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CATALOGO ── -->
+    <div class="view" id="view-catalogo">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Catálogo de Productos</div>
+          <div class="page-sub">El bot usa este catálogo para responder consultas</div>
+        </div>
+        <button class="btn btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Agregar producto
+        </button>
+      </div>
+      <div class="catalog-grid">
+        <div class="product-card">
+          <div class="product-img" style="background:linear-gradient(135deg,#fdf0f0,#f8d7d8)">🏌️</div>
+          <div class="product-body">
+            <div class="product-name">Driver Callaway Paradym Ai Smoke</div>
+            <div class="product-desc">Driver con IA en la cara, bajo spin, alta velocidad. Loft 9°. Disponible en varios shafts.</div>
+            <div class="product-price">€ 549</div>
+          </div>
+          <div class="product-footer">
+            <span class="product-stock ok">✓ En stock</span>
+            <div class="product-actions">
+              <button class="product-btn edit">Editar</button>
+              <button class="product-btn del">Eliminar</button>
+            </div>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-img" style="background:linear-gradient(135deg,#f5f3ff,#ede9fe)">⛳</div>
+          <div class="product-body">
+            <div class="product-name">Set Hierros Titleist T150</div>
+            <div class="product-desc">Set completo hierros 4-PW. Forjado, alto control. Ideal jugadores medios-bajos de handicap.</div>
+            <div class="product-price">€ 1.199</div>
+          </div>
+          <div class="product-footer">
+            <span class="product-stock ok">✓ En stock</span>
+            <div class="product-actions">
+              <button class="product-btn edit">Editar</button>
+              <button class="product-btn del">Eliminar</button>
+            </div>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-img" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb)">👕</div>
+          <div class="product-body">
+            <div class="product-name">Polo BRAX Golf Tour</div>
+            <div class="product-desc">Polo técnico de golf, tejido transpirable 4-way stretch, protección solar UPF 50+.</div>
+            <div class="product-price">€ 89</div>
+          </div>
+          <div class="product-footer">
+            <span class="product-stock low">⚠ Stock bajo</span>
+            <div class="product-actions">
+              <button class="product-btn edit">Editar</button>
+              <button class="product-btn del">Eliminar</button>
+            </div>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-img" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9)">👟</div>
+          <div class="product-body">
+            <div class="product-name">Zapatos FootJoy Pro SL</div>
+            <div class="product-desc">Zapatos de golf sin clavos, impermeables, suela de alto agarre. Tallas 40–47.</div>
+            <div class="product-price">€ 149</div>
+          </div>
+          <div class="product-footer">
+            <span class="product-stock ok">✓ En stock</span>
+            <div class="product-actions">
+              <button class="product-btn edit">Editar</button>
+              <button class="product-btn del">Eliminar</button>
+            </div>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-img" style="background:linear-gradient(135deg,#fff8e1,#ffecb3)">🎒</div>
+          <div class="product-body">
+            <div class="product-name">Bolsa Titleist Players 4</div>
+            <div class="product-desc">Bolsa stand bag ultraligera, 4 divisores, 7 bolsillos. Disponible en negro, blanco y rojo.</div>
+            <div class="product-price">€ 199</div>
+          </div>
+          <div class="product-footer">
+            <span class="product-stock ok">✓ En stock</span>
+            <div class="product-actions">
+              <button class="product-btn edit">Editar</button>
+              <button class="product-btn del">Eliminar</button>
+            </div>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-img" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0)">🏅</div>
+          <div class="product-body">
+            <div class="product-name">Pelotas Titleist Pro V1 (12u)</div>
+            <div class="product-desc">La pelota de golf más usada en el mundo. Trayectoria consistente, alto spin en approach.</div>
+            <div class="product-price">€ 52</div>
+          </div>
+          <div class="product-footer">
+            <span class="product-stock ok">✓ En stock</span>
+            <div class="product-actions">
+              <button class="product-btn edit">Editar</button>
+              <button class="product-btn del">Eliminar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RESPUESTAS ── -->
+    <div class="view" id="view-respuestas">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Respuestas Automáticas</div>
+          <div class="page-sub">Configurá qué responde el bot ante cada disparador</div>
+        </div>
+        <button class="btn btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nueva respuesta
+        </button>
+      </div>
+      <div class="responses-list">
+        <div class="response-card">
+          <div class="response-trigger">
+            <span class="trigger-chip">saludo_inicial</span>
+            <span class="tag green">Activo</span>
+            <span class="tag blue">Automático</span>
+          </div>
+          <div class="response-text">
+            ¡Hola! Bienvenido/a a Depique ⛳ Soy el asistente virtual. ¿En qué te puedo ayudar hoy? Puedo darte info sobre palos, ropa, calzado, precios, stock, envíos y nuestro servicio de fitting.
+          </div>
+          <div class="response-footer">
+            <div class="response-meta">Activado por: cualquier mensaje inicial · Última edición: hace 2 días</div>
+            <div class="response-acts">
+              <button class="product-btn edit">Editar</button>
+            </div>
+          </div>
+        </div>
+        <div class="response-card">
+          <div class="response-trigger">
+            <span class="trigger-chip">consulta_precio</span>
+            <span class="tag green">Activo</span>
+            <span class="tag blue">IA + Catálogo</span>
+          </div>
+          <div class="response-text">
+            El precio de {producto} es {precio}. ¿Te gustaría más información, o te interesa agendar un fitting para encontrar el equipo ideal para tu swing?
+          </div>
+          <div class="response-footer">
+            <div class="response-meta">Activado por: "precio", "cuánto cuesta", "cuanto sale" · Variables: {producto}, {precio}</div>
+            <div class="response-acts">
+              <button class="product-btn edit">Editar</button>
+            </div>
+          </div>
+        </div>
+        <div class="response-card">
+          <div class="response-trigger">
+            <span class="trigger-chip">consulta_envio</span>
+            <span class="tag green">Activo</span>
+            <span class="tag blue">Automático</span>
+          </div>
+          <div class="response-text">
+            Realizamos envíos a toda España a través de MRW y SEUR. El plazo estimado es de 24 a 48 horas hábiles. ¿A qué provincia necesitás el envío?
+          </div>
+          <div class="response-footer">
+            <div class="response-meta">Activado por: "envío", "envios", "mandan", "llega a" · Última edición: hace 5 días</div>
+            <div class="response-acts">
+              <button class="product-btn edit">Editar</button>
+            </div>
+          </div>
+        </div>
+        <div class="response-card">
+          <div class="response-trigger">
+            <span class="trigger-chip">consulta_fitting</span>
+            <span class="tag green">Activo</span>
+            <span class="tag blue">Derivación humana</span>
+          </div>
+          <div class="response-text">
+            ¡Genial! El fitting personalizado es clave para mejorar tu juego 🏌️ Te ponemos en contacto con uno de nuestros expertos. ¿Cuál es tu disponibilidad horaria esta semana?
+          </div>
+          <div class="response-footer">
+            <div class="response-meta">Activado por: "fitting", "medida", "personalizado", "swing" · Deriva a asesor</div>
+            <div class="response-acts">
+              <button class="product-btn edit">Editar</button>
+            </div>
+          </div>
+        </div>
+        <div class="response-card">
+          <div class="response-trigger">
+            <span class="trigger-chip">fuera_de_horario</span>
+            <span class="tag green">Activo</span>
+            <span class="tag blue">Automático</span>
+          </div>
+          <div class="response-text">
+            Gracias por contactarnos ⛳ En este momento estamos fuera del horario de atención (Lunes a Viernes 10:00–19:00). Tu mensaje quedó registrado y te respondemos a la brevedad.
+          </div>
+          <div class="response-footer">
+            <div class="response-meta">Activado fuera del horario configurado · Última edición: hace 1 semana</div>
+            <div class="response-acts">
+              <button class="product-btn edit">Editar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TIENDAS ── -->
+    <div class="view" id="view-tiendas">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Red de Tiendas</div>
+          <div class="page-sub">13 tiendas físicas · 1 canal digital · El bot usa esta red para derivar clientes al punto de venta ideal</div>
+        </div>
+        <button class="btn btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Agregar tienda
+        </button>
+      </div>
+
+      <!-- KPIs del período -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-row">
+            <div class="stat-icon green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <span class="stat-delta up">+8%</span>
+          </div>
+          <div class="stat-val">€ 427.6k</div>
+          <div class="stat-lbl">Ventas totales · mes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-row">
+            <div class="stat-icon purple">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            </div>
+            <span class="stat-delta up">+15%</span>
+          </div>
+          <div class="stat-val">142</div>
+          <div class="stat-lbl">Fittings agendados · mes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-row">
+            <div class="stat-icon amber">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v11a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9"/><path d="M3 9h18"/></svg>
+            </div>
+            <span class="stat-delta flat">11/13</span>
+          </div>
+          <div class="stat-val">11</div>
+          <div class="stat-lbl">Tiendas abiertas ahora</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-row">
+            <div class="stat-icon blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            </div>
+            <span class="stat-delta up">+€118</span>
+          </div>
+          <div class="stat-val">€ 1.842</div>
+          <div class="stat-lbl">Ticket promedio</div>
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="stores-toolbar">
+        <div class="filter-tabs">
+          <button class="filter-tab active" onclick="filterTable(this,'all')">Todas <span class="count">14</span></button>
+          <button class="filter-tab" onclick="filterTable(this,'propia')">Propias <span class="count">4</span></button>
+          <button class="filter-tab" onclick="filterTable(this,'proshop')">Pro Shops <span class="count">6</span></button>
+          <button class="filter-tab" onclick="filterTable(this,'academy')">Academy <span class="count">1</span></button>
+          <button class="filter-tab" onclick="filterTable(this,'franquicia')">Franquicias <span class="count">2</span></button>
+          <button class="filter-tab" onclick="filterTable(this,'ecommerce')">Ecommerce <span class="count">1</span></button>
+        </div>
+        <div class="period-selector">
+          <button class="period-btn">Hoy</button>
+          <button class="period-btn">Semana</button>
+          <button class="period-btn active">Mes</button>
+          <button class="period-btn">Trimestre</button>
+          <button class="period-btn">Año</button>
+        </div>
+        <div class="search-wrap toolbar-search">
+          <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="search-input" placeholder="Buscar tienda...">
+        </div>
+      </div>
+
+      <!-- Tabla de tiendas -->
+      <div class="stores-table-wrap">
+        <table class="stores-table">
+          <thead>
+            <tr>
+              <th class="sortable" data-col="nombre" onclick="sortTable(this)">Tienda <span class="sort-icon">↕</span></th>
+              <th class="sortable" data-col="tipo" onclick="sortTable(this)">Tipo <span class="sort-icon">↕</span></th>
+              <th>Estado</th>
+              <th class="num sortable" data-col="ventas" onclick="sortTable(this)">Ventas (mes) <span class="sort-icon">↕</span></th>
+              <th class="num sortable" data-col="fittings" onclick="sortTable(this)">Fittings <span class="sort-icon">↕</span></th>
+              <th class="num sortable" data-col="ticket" onclick="sortTable(this)">Ticket prom. <span class="sort-icon">↕</span></th>
+              <th>Servicios</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Ecommerce -->
+            <tr data-idx="0" class="ecommerce-row">
+              <td>
+                <div class="store-cell">
+                  <span class="store-dot ecommerce"></span>
+                  <div class="store-cell-main">
+                    <span class="store-cell-name">Depique.com · Tienda Online</span>
+                    <span class="store-cell-loc">depique.com · Shopify · España</span>
+                  </div>
+                </div>
+              </td>
+              <td><span class="store-badge ecommerce">Ecommerce</span></td>
+              <td><span class="status-pill online">En línea</span></td>
+              <td class="num">€ 14.820 <span class="mini-trend up">+8%</span></td>
+              <td class="num">—</td>
+              <td class="num">€ 620</td>
+              <td><div class="svc-dots"><span class="svc-dot on" title="Envíos">E</span><span class="svc-dot on" title="Web">W</span><span class="svc-dot" title="Fitting">F</span></div></td>
+              <td><button class="row-btn" onclick="openFicha(this)">Ver ficha →</button></td>
+            </tr>
+
+            <!-- Tiendas propias -->
+            <tr data-idx="1">
+              <td>
+                <div class="store-cell">
+                  <span class="store-dot propia"></span>
+                  <div class="store-cell-main">
+                    <span class="store-cell-name">Depique Madrid</span>
+                    <span class="store-cell-loc">Alcobendas · Madrid</span>
+                  </div>
+                </div>
+              </td>
+              <td><span class="store-badge propia">Propia</span></td>
+              <td><span class="status-pill open">Abierto</span></td>
+              <td class="num">€ 82.450 <span class="mini-trend up">+12%</span></td>
+              <td class="num">34</td>
+              <td class="num">€ 2.180</td>
+              <td><div class="svc-dots"><span class="svc-dot on" title="Fitting">F</span><span class="svc-dot on" title="Taller">T</span><span class="svc-dot" title="Academy">A</span></div></td>
+              <td><button class="row-btn" onclick="openFicha(this)">Ver ficha →</button></td>
+            </tr>
+            <tr data-idx="2">
+              <td>
+                <div class="store-cell">
+                  <span class="store-dot propia"></span>
+                  <div class="store-cell-main">
+                    <span class="store-cell-name">Depique Barcelona</span>
+                    <span class="store-cell-loc">C/ J.S. Bach · Barcelona</span>
+                  </div>
+                </div>
+              </td>
+              <td><span class="store-badge propia">Propia</span></td>
+              <td><span class="status-pill open">Abierto</span></td>
+              <td class="num">€ 94.210 <span class="mini-trend up">+18%</span></td>
+              <td class="num">41</td>
+              <td class="num">€ 2.298</td>
+              <td><div class="svc-dots"><span class="svc-dot on">F</span><span class="svc-dot on">T</span><span class="svc-dot">A</span></div></td>
+              <td><button class="row-btn" onclick="openFicha(this)">Ver ficha →</button></td>
+            </tr>
+            <tr data-idx="3">
+              <td>
+                <div class="store-cell">
+                  <span class="store-dot propia"></span>
+                  <div class="store-cell-main">
+                    <span class="store-cell-name">Depique Valencia</span>
+                    <span class="store-cell-loc">Av. Regne de Valencia</span>
+                  </div>
+                </div>
+              </td>
+              <td><span class="store-badge propia">Propia</span></td>
+              <td><span class="status-pill open">Abierto</span></td>
+              <td class="num">€ 58.790 <span class="mini-trend up">+6%</span></td>
+              <td class="num">22</td>
+              <td class="num">€ 1.945</td>
+              <td><div class="svc-dots"><span class="svc-dot on">F</span><span class="svc-dot on">T</span><span class="svc-dot">A</span></div></td>
+              <td><button class="row-btn" onclick="openFicha(this)">Ver ficha →</button></td>
+            </tr>
+            <tr data-idx="4">
+              <td>
+                <div class="store-cell">
+                  <span class="store-dot propia"></span>
+                  <div class="store-cell-main">
+                    <span class="store-cell-name">Depique Calvià</span>
+                    <span class="store-cell-loc">Santa Ponça · Mallorca</span>
+                  </div>
+                </div>
+              </td>
+              <td><span class="store-badge propia">Propia</span></td>
+              <td><span class="status-pill open">Abierto</span></td>
+              <td class="num">€ 47.320 <span class="mini-trend dn">-3%</span></td>
+              <td class="num">18</td>
+              <td class="num">€ 2.112</td>
+              <td><div class="svc-dots"><span class="svc-dot on">F</span><span class="svc-dot on">T</span><span class="svc-dot">A</span></div></td>
+              <td><button class="row-btn" onclick="openFicha(this)">Ver ficha →</button></td>
+            </tr>
+
+            <!-- Pro Shops -->
+            <tr data-idx="5">
+              <td>
+                <div class="store-cell">
+                  <span class="store-dot proshop"></span>
+                  <div class="store-cell-main">
+                    <span class="store-cell-name">Club de Golf Llavaneras</span>
+                    <span class="store-cell-loc">Sant Andreu de Llavaneres</span>
+                  </div>
+                </div>
+              </td>
+              <td><span class="store-badge proshop">Pro Shop</span></td>
+              <td><span class="status-pill closed">Cerrado (lun)</span></td>
+              <td class="num">€ 24.180 <span class="mini-trend up">+4%</span></td>
+              <td class="num">6</td>
+              <td class="num">€ 1.420</td>
+              <td><div class="svc-dots"><span class="svc-dot">F</span><span class="svc-dot">T</span><span class="svc-dot">A</span></div></td>
+              <td><button class="row-btn" onclick="openFicha(this)">Ver ficha →</button></td>
+            </tr>
+            <tr data-idx="6">
+              <td>
+                <div class="store-cell">
+                  <span class="store-dot proshop"></span>
+                  <div class="store-cell-main">
+                    <span class="store-cell-name">Real Club de Golf El Prat</span>
+                    <span class="store-cell-loc">Terrassa · Barcelona</span>
+                  </div>
+                </div>
+              </td>
+              <td><span class="store-badge proshop">Pro Shop</span></td>
+              <td><span class="status-pill open">Abierto</span></td>
+              <td class="num">€ 38.520 <span class="mini-trend up">+9%</span></td>
+              <td class="num">9</td>
+              <td class="num">€ 1.680</td>
+              <td><div class="svc-dots"><span class="svc-dot">F</span><span class="svc-dot">T</span><span class="svc-dot">A</span></div></td>
+              <td><button class="row-btn" onclick="openFicha(this)">Ver ficha →</button></td>
+            </tr>
+            <tr data-idx="7">
+              <td>
+                <div class="store-cell">
+                  <span class="store-dot proshop"></span>
+                  <div class="store-cell-main">
+                    <span class="store-cell-name">Club de Golf Terramar</span>
+                    <span class="store-cell-loc">Sitges · Barcelona</span>
+                  </div>
+                </div>
+              </td>
+              <td><span class="store-badge proshop">Pro Shop</span></td>
+              <td><span class="status-pill closed">Cerrado (lun)</span></td>
+              <td class="num">€ 19.640 <span class="mini-trend flat">0%</span></td>
+              <td class="num">4</td>
+              <td class="num">€ 1.350</td>
+              <td><div class="svc-dots"><span class="svc-dot">F</span><span class="svc-dot">T</span><span class="svc-dot">A</span></div></td>
+              <td><button class="row-btn" onclick="openFicha(this)">Ver ficha →</button></td>
+            </tr>
+            <tr data-idx="8">
+              <td>
+                <div class="store-cell">
+                  <span class="store-dot proshop"></span>
+                  <div class="store-cell-main">
+                    <span class="store-cell-name">Club de Golf Vallromanes</span>
+                    <span class="store-cell-loc">Vallromanes · Barcelona</span>
+                  </div>
+                </div>
+              </td>
+              <td><span class="store-badge proshop">Pro Shop</span></td>
+              <td><span class="status-pill open">Abierto</span></td>
+              <td class="num">€ 16.890 <span class="mini-trend dn">-5%</span></td>
+              <td class="num">3</td>
+              <td class="num">€ 1.280</td>
+              <td><div class="svc-dots"><span class="svc-dot">F</span><span class="svc-dot">T</span><span class="svc-dot">A</span></div></td>
+              <td><button class="row-btn" onclick="openFicha(this)">Ver ficha →</button></td>
+            </tr>
+            <tr data-idx="9">
+              <td>
+                <div class="store-cell">
+                  <span class="store-dot proshop"></span>
+                  <div class="store-cell-main">
+                    <span class="store-cell-name">Depique Bendinat</span>
+                    <span class="store-cell-loc">Bendinat · Mallorca</span>
+                  </div>
+                </div>
+              </td>
+              <td><span class="store-badge proshop">Pro Shop</span></td>
+              <td><span class="status-pill open">Abierto</span></td>
+              <td class="num">€ 31.450 <span class="mini-trend up">+11%</span></td>
+              <td class="num">8</td>
+              <td class="num">€ 1.820</td>
+              <td><div class="svc-dots"><span class="svc-dot on">F</span><span class="svc-dot">T</span><span class="svc-dot">A</span></div></td>
+              <td><button class="row-btn" onclick="openFicha(this)">Ver ficha →</button></td>
+            </tr>
+            <tr data-idx="10">
+              <td>
+                <div class="store-cell">
+                  <span class="store-dot proshop"></span>
+                  <div class="store-cell-main">
+                    <span class="store-cell-name">Club de Golf El Bosque</span>
+                    <span class="store-cell-loc">Godelleta · Valencia</span>
+                  </div>
+                </div>
+              </td>
+              <td><span class="store-badge proshop">Pro Shop</span></td>
+              <td><span class="status-pill open">Abierto</span></td>
+              <td class="num">€ 22.710 <span class="mini-trend up">+7%</span></td>
+              <td class="num">5</td>
+              <td class="num">€ 1.510</td>
+              <td><div class="svc-dots"><span class="svc-dot">F</span><span class="svc-dot">T</span><span class="svc-dot">A</span></div></td>
+              <td><button class="row-btn" onclick="openFicha(this)">Ver ficha →</button></td>
+            </tr>
+
+            <!-- Academy -->
+            <tr data-idx="11">
+              <td>
+                <div class="store-cell">
+                  <span class="store-dot academy"></span>
+                  <div class="store-cell-main">
+                    <span class="store-cell-name">Depique Golf Academy Gràcia</span>
+                    <span class="store-cell-loc">Travessera de Gràcia · BCN</span>
+                  </div>
+                </div>
+              </td>
+              <td><span class="store-badge academy">Academy</span></td>
+              <td><span class="status-pill open">Abierto</span></td>
+              <td class="num">€ 28.900 <span class="mini-trend up">+22%</span></td>
+              <td class="num">12</td>
+              <td class="num">€ 1.240</td>
+              <td><div class="svc-dots"><span class="svc-dot on" title="Clases">C</span><span class="svc-dot on">F</span><span class="svc-dot on" title="Simulador">S</span></div></td>
+              <td><button class="row-btn" onclick="openFicha(this)">Ver ficha →</button></td>
+            </tr>
+
+            <!-- Franquicias -->
+            <tr data-idx="12">
+              <td>
+                <div class="store-cell">
+                  <span class="store-dot franquicia"></span>
+                  <div class="store-cell-main">
+                    <span class="store-cell-name">Club de Golf Sant Cugat</span>
+                    <span class="store-cell-loc">Sant Cugat del Vallès</span>
+                  </div>
+                </div>
+              </td>
+              <td><span class="store-badge franquicia">Franquicia</span></td>
+              <td><span class="status-pill open">Abierto</span></td>
+              <td class="num">€ 26.840 <span class="mini-trend up">+3%</span></td>
+              <td class="num">—</td>
+              <td class="num">€ 1.390</td>
+              <td><div class="svc-dots"><span class="svc-dot">F</span><span class="svc-dot">T</span><span class="svc-dot">A</span></div></td>
+              <td><button class="row-btn" onclick="openFicha(this)">Ver ficha →</button></td>
+            </tr>
+            <tr data-idx="13">
+              <td>
+                <div class="store-cell">
+                  <span class="store-dot franquicia"></span>
+                  <div class="store-cell-main">
+                    <span class="store-cell-name">Club de Golf Barcelona</span>
+                    <span class="store-cell-loc">Sant Esteve Sesrovires</span>
+                  </div>
+                </div>
+              </td>
+              <td><span class="store-badge franquicia">Franquicia</span></td>
+              <td><span class="status-pill open">Abierto</span></td>
+              <td class="num">€ 21.310 <span class="mini-trend dn">-2%</span></td>
+              <td class="num">—</td>
+              <td class="num">€ 1.270</td>
+              <td><div class="svc-dots"><span class="svc-dot">F</span><span class="svc-dot">T</span><span class="svc-dot">A</span></div></td>
+              <td><button class="row-btn" onclick="openFicha(this)">Ver ficha →</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    <!-- ── CONFIGURACION ── -->
+    <div class="view" id="view-configuracion">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Configuración</div>
+          <div class="page-sub">Ajustes del bot y la cuenta</div>
+        </div>
+      </div>
+      <div class="config-layout">
+        <div class="config-nav">
+          <div class="config-nav-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Bot general
+          </div>
+          <div class="config-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Horarios
+          </div>
+          <div class="config-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            WhatsApp
+          </div>
+          <div class="config-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+            Analíticas
+          </div>
+        </div>
+
+        <div class="config-panel">
+          <div class="config-section">
+            <div class="config-section-title">Identidad del bot</div>
+            <div class="field-row">
+              <div class="field">
+                <label>Nombre del bot</label>
+                <input type="text" value="Asistente Depique Golf">
+              </div>
+              <div class="field">
+                <label>Idioma principal</label>
+                <select><option>Español (Argentina)</option><option>Español (neutro)</option><option>Inglés</option></select>
+              </div>
+            </div>
+            <div class="field-row single">
+              <div class="field">
+                <label>Personalidad / Tono</label>
+                <select>
+                  <option>Amigable y profesional</option>
+                  <option>Formal</option>
+                  <option>Descontracturado</option>
+                </select>
+              </div>
+            </div>
+            <div class="field-row single">
+              <div class="field">
+                <label>Contexto del negocio</label>
+                <textarea>Depique es una tienda especializada en equipamiento de golf en España. Ofrecemos palos (drivers, hierros, putters, wedges), ropa, calzado, bolsas y accesorios de las mejores marcas: Callaway, Titleist, BRAX, FootJoy, Chervo. Contamos con servicio de fitting personalizado.</textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="config-section">
+            <div class="config-section-title">Comportamiento</div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <div class="toggle-name">Respuesta automática 24/7</div>
+                <div class="toggle-desc">El bot responde en cualquier horario</div>
+              </div>
+              <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <div class="toggle-name">Consultar catálogo en tiempo real</div>
+                <div class="toggle-desc">El bot usa el catálogo actualizado para responder precios y stock</div>
+              </div>
+              <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <div class="toggle-name">Notificar mensajes sin respuesta</div>
+                <div class="toggle-desc">Alerta al equipo si el bot no puede resolver una consulta</div>
+              </div>
+              <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <div class="toggle-name">Modo mantenimiento</div>
+                <div class="toggle-desc">Desactiva el bot temporalmente</div>
+              </div>
+              <div class="toggle" onclick="this.classList.toggle('on')"></div>
+            </div>
+          </div>
+
+          <div class="save-bar">
+            <button class="btn btn-ghost">Cancelar</button>
+            <button class="btn btn-primary">Guardar cambios</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+
+const STORES_DATA = [{"name": "Depique.com · Tienda Online", "type": "ecommerce", "loc": "depique.com · Shopify · España", "ventas": 14820, "fittings": 0, "ticket": 620, "phone1": "—", "phone2": "", "email": "", "hours": [["Lun – Dom", "24h online", ""]], "services": ["Envíos", "Web"]}, {"name": "Depique Madrid", "type": "propia", "loc": "C/ Valportillo II 8 bis, Alcobendas · Madrid", "ventas": 82450, "fittings": 34, "ticket": 2180, "phone1": "914 117 925", "phone2": "671 421 235", "email": "madrid@depique.com", "hours": [["Lun – Vie", "10:30 – 19:30", ""], ["Sábado", "09:30 – 14:00", ""], ["Domingo", "Cerrado", "closed"]], "services": ["Fitting", "Taller"]}, {"name": "Depique Barcelona", "type": "propia", "loc": "C/ Johann Sebastian Bach, 9 · Barcelona", "ventas": 94210, "fittings": 41, "ticket": 2298, "phone1": "932 012 931", "phone2": "678 316 606", "email": "barcelona@depique.com", "hours": [["Lun – Vie", "10:00 – 20:30", ""], ["Sábado", "10:30 – 14:00", ""], ["Domingo", "Cerrado", "closed"]], "services": ["Fitting", "Taller"]}, {"name": "Depique Valencia", "type": "propia", "loc": "Av. Regne de Valencia, 64 · Valencia", "ventas": 58790, "fittings": 22, "ticket": 1945, "phone1": "961 678 825", "phone2": "697 420 499", "email": "valencia@depique.com", "hours": [["Lun – Vie", "10:00–14:00 · 16:30–20:00", ""], ["Sábado", "10:30 – 14:00", ""], ["Domingo", "Cerrado", "closed"]], "services": ["Fitting", "Taller"]}, {"name": "Depique Calvià", "type": "propia", "loc": "Polígon Son Bugadelles, Santa Ponça · Mallorca", "ventas": 47320, "fittings": 18, "ticket": 2112, "phone1": "971 691 984", "phone2": "647 827 902", "email": "calvia@depique.com", "hours": [["Lun – Vie", "09:30 – 18:30", ""], ["Sábado", "10:00 – 14:00", ""], ["Domingo", "Cerrado", "closed"]], "services": ["Fitting", "Taller"]}, {"name": "Club de Golf Llavaneras", "type": "proshop", "loc": "Camí Golf, 49, Sant Andreu de Llavaneres · Barcelona", "ventas": 24180, "fittings": 6, "ticket": 1420, "phone1": "93 792 60 50", "phone2": "652 958 754", "email": "llavaneras@depique.com", "hours": [["Lunes", "Cerrado", "closed"], ["Mar – Sáb", "08:30–14:00 · 15:00–17:30", ""], ["Domingo", "09:00 – 14:00", ""]], "services": ["Pro Shop"]}, {"name": "Real Club de Golf El Prat", "type": "proshop", "loc": "Plans de Bonvilar, 17, Terrassa · Barcelona", "ventas": 38520, "fittings": 9, "ticket": 1680, "phone1": "937 28 10 06", "phone2": "611 565 306", "email": "elprat@depique.com", "hours": [["Lun – Sáb", "08:30–13:30 · 14:00–17:00", ""], ["Domingo", "09:00 – 14:00", ""]], "services": ["Pro Shop"]}, {"name": "Club de Golf Terramar", "type": "proshop", "loc": "Carretera del golf s/n, Sitges · Barcelona", "ventas": 19640, "fittings": 4, "ticket": 1350, "phone1": "938 11 01 78", "phone2": "623 277 177", "email": "terramar@depique.com", "hours": [["Lunes", "Cerrado", "closed"], ["Mar – Sáb", "08:30–14:00 · 15:00–17:30", ""], ["Domingo", "09:00 – 14:00", ""]], "services": ["Pro Shop"]}, {"name": "Club de Golf Vallromanes", "type": "proshop", "loc": "Psg. Torre Tavernera s/n, Vallromanes · Barcelona", "ventas": 16890, "fittings": 3, "ticket": 1280, "phone1": "657 970 255", "phone2": "", "email": "vallromanes@depique.com", "hours": [["Martes", "Cerrado", "closed"], ["Lun · Mié – Sáb", "08:30–14:00 · 15:00–17:30", ""], ["Domingo", "09:00 – 14:00", ""]], "services": ["Pro Shop"]}, {"name": "Depique Bendinat", "type": "proshop", "loc": "C/ Campoamor s/n, Bendinat · Mallorca", "ventas": 31450, "fittings": 8, "ticket": 1820, "phone1": "971 412 224", "phone2": "", "email": "bendinat@depique.com", "hours": [["Lun – Sáb", "08:30–14:00 · 15:00–17:30", ""], ["Domingo", "09:00 – 14:00", ""]], "services": ["Fitting", "Pro Shop"]}, {"name": "Club de Golf El Bosque", "type": "proshop", "loc": "A-3 km 4.1, Godelleta · Valencia", "ventas": 22710, "fittings": 5, "ticket": 1510, "phone1": "961 80 80 09", "phone2": "", "email": "golf.office@elbosquegolf.com", "hours": [["Lun – Dom", "08:00 – 19:00", ""]], "services": ["Pro Shop"]}, {"name": "Depique Golf Academy Gràcia", "type": "academy", "loc": "Travessera de Gràcia, 72 · Barcelona", "ventas": 28900, "fittings": 12, "ticket": 1240, "phone1": "934 14 52 35", "phone2": "", "email": "academia@depique.com", "hours": [["Lun – Vie", "10:00 – 20:00", ""], ["Sáb – Dom", "Cerrado", "closed"]], "services": ["Clases", "Fitting", "Simulador"]}, {"name": "Club de Golf Sant Cugat", "type": "franquicia", "loc": "C/ Villà 79, Sant Cugat del Vallès · Barcelona", "ventas": 26840, "fittings": 0, "ticket": 1390, "phone1": "93 674 39 08", "phone2": "", "email": "botiga@golfsantcugat.com", "hours": [["Martes", "Cerrado", "closed"], ["Resto", "07:00 – 19:00", ""]], "services": ["Pro Shop"]}, {"name": "Club de Golf Barcelona", "type": "franquicia", "loc": "Av. Golf Masia Bach, Sant Esteve Sesrovires · Barcelona", "ventas": 21310, "fittings": 0, "ticket": 1270, "phone1": "93 772 88 00", "phone2": "", "email": "info@golfbarcelona.com", "hours": [["Lun – Dom", "07:45 – 19:00", ""]], "services": ["Pro Shop"]}];
+function navigate(view) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.getAttribute('onclick') === `navigate('${view}')`) n.classList.add('active');
+  });
+}
+
+function toggleGroup(id) {
+  document.getElementById('group-' + id).classList.toggle('collapsed');
+}
+
+/* ── Filter tabs ── */
+function filterTable(btn, type) {
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  const rows = document.querySelectorAll('.stores-table tbody tr');
+  rows.forEach(row => {
+    if (type === 'all') { row.style.display = ''; return; }
+    const badge = row.querySelector('.store-badge');
+    if (!badge) { row.style.display = 'none'; return; }
+    const rowType = badge.classList[1];
+    row.style.display = (rowType === type) ? '' : 'none';
+  });
+}
+
+/* ── Column sort ── */
+let sortCol = null, sortAsc = true;
+function sortTable(th) {
+  const col = th.dataset.col;
+  if (sortCol === col) { sortAsc = !sortAsc; } else { sortAsc = true; sortCol = col; }
+  document.querySelectorAll('.stores-table thead th').forEach(h => {
+    h.classList.remove('sort-asc','sort-desc');
+    const icon = h.querySelector('.sort-icon');
+    if (icon) icon.textContent = '↕';
+  });
+  th.classList.add(sortAsc ? 'sort-asc' : 'sort-desc');
+  const icon = th.querySelector('.sort-icon');
+  if (icon) icon.textContent = sortAsc ? '↑' : '↓';
+
+  const tbody = document.querySelector('.stores-table tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  rows.sort((a, b) => {
+    const ia = parseInt(a.dataset.idx), ib = parseInt(b.dataset.idx);
+    const da = STORES_DATA[ia], db = STORES_DATA[ib];
+    let va, vb;
+    if (col === 'nombre')   { va = da.name; vb = db.name; return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va); }
+    if (col === 'tipo')     { va = da.type; vb = db.type; return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va); }
+    if (col === 'ventas')   { va = da.ventas; vb = db.ventas; }
+    if (col === 'fittings') { va = da.fittings; vb = db.fittings; }
+    if (col === 'ticket')   { va = da.ticket; vb = db.ticket; }
+    return sortAsc ? va - vb : vb - va;
+  });
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+/* ── Ficha drawer ── */
+function openFicha(btn) {
+  const row = btn.closest('tr');
+  const idx = parseInt(row.dataset.idx);
+  const s = STORES_DATA[idx];
+  const typeLabels = { propia:'Tienda Propia', proshop:'Pro Shop', academy:'Academy', franquicia:'Franquicia', ecommerce:'Ecommerce' };
+  const fmt = n => n ? '€ ' + n.toLocaleString('es-ES') : '—';
+
+  let hoursHtml = s.hours.map(([day, time, cls]) =>
+    `<div class="drawer-hours-row ${cls}"><span>${day}</span><span>${time}</span></div>`
+  ).join('');
+
+  let servicesHtml = s.services.map(sv =>
+    `<span class="service-chip on">${sv}</span>`
+  ).join('');
+
+  let contactHtml = '';
+  if (s.phone1 && s.phone1 !== '—') contactHtml += `<div class="drawer-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span><strong>${s.phone1}</strong>${s.phone2 ? ' · ' + s.phone2 : ''}</span></div>`;
+  if (s.email) contactHtml += `<div class="drawer-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><a href="mailto:${s.email}">${s.email}</a></div>`;
+
+  document.getElementById('drawer-type-strip').className = `drawer-type-strip ${s.type}`;
+  document.getElementById('drawer-store-name').textContent = s.name;
+  document.getElementById('drawer-store-type').textContent = typeLabels[s.type] || s.type;
+  document.getElementById('drawer-loc').textContent = s.loc;
+  document.getElementById('drawer-contact').innerHTML = contactHtml;
+  document.getElementById('drawer-hours-body').innerHTML = hoursHtml;
+  document.getElementById('drawer-services').innerHTML = servicesHtml;
+  document.getElementById('drawer-ventas').textContent = fmt(s.ventas);
+  document.getElementById('drawer-fittings').textContent = s.fittings || '—';
+  document.getElementById('drawer-ticket').textContent = fmt(s.ticket);
+
+  document.getElementById('ficha-drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+}
+
+function closeDrawer() {
+  document.getElementById('ficha-drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+}
+</script>
+
+<!-- Drawer overlay -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+
+<!-- Ficha drawer -->
+<div class="drawer" id="ficha-drawer">
+  <div class="drawer-topbar">
+    <div>
+      <div class="drawer-title" id="drawer-store-name"></div>
+      <div style="font-size:11px;color:var(--c-muted);margin-top:2px" id="drawer-store-type"></div>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer()">×</button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-type-strip" id="drawer-type-strip"></div>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">Ubicación</div>
+      <div class="drawer-field">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span id="drawer-loc"></span>
+      </div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">Contacto</div>
+      <div id="drawer-contact"></div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">Horarios</div>
+      <div class="drawer-hours" id="drawer-hours-body"></div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">Servicios</div>
+      <div class="drawer-services" id="drawer-services"></div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">Métricas del mes</div>
+      <div class="drawer-kpis">
+        <div class="drawer-kpi">
+          <div class="drawer-kpi-val" id="drawer-ventas"></div>
+          <div class="drawer-kpi-lbl">Ventas</div>
+        </div>
+        <div class="drawer-kpi">
+          <div class="drawer-kpi-val" id="drawer-fittings"></div>
+          <div class="drawer-kpi-lbl">Fittings</div>
+        </div>
+        <div class="drawer-kpi">
+          <div class="drawer-kpi-val" id="drawer-ticket"></div>
+          <div class="drawer-kpi-lbl">Ticket prom.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-primary" style="flex:1">Editar ficha</button>
+    <button class="btn btn-ghost" onclick="closeDrawer()">Cerrar</button>
+  </div>
+</div>
+
+</body>
+</html>
