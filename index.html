@@ -3534,6 +3534,15 @@ const PERIOD_DATA = {
 
 let currentPeriod = 'mes';
 
+function makeSvgPath(values, maxV, minV, cW, cH, ox, oy) {
+  const n = values.length, xS = cW / (n - 1), range = maxV - minV;
+  return values.map((v, i) => {
+    const x = (ox + i * xS).toFixed(1);
+    const y = (oy + cH - ((v - minV) / range) * cH).toFixed(1);
+    return `${i===0?'M':'L'}${x},${y}`;
+  }).join(' ');
+}
+
 function renderSalesChart() {
   const el = document.getElementById('sales-chart-svg');
   if (!el) return;
