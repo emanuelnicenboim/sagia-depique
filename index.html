@@ -1391,6 +1391,237 @@ body {
 ::-webkit-scrollbar { width:5px; height:5px; }
 ::-webkit-scrollbar-track { background:transparent; }
 ::-webkit-scrollbar-thumb { background:var(--c-border); border-radius:4px; }
+
+/* ══════════════ MARKETING VIEW ══════════════ */
+.mkt-kpi-row {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:14px;
+  margin-bottom:20px;
+}
+.mkt-kpi {
+  background:var(--c-surface); border:1px solid var(--c-border);
+  border-radius:var(--radius); padding:16px 18px; box-shadow:var(--shadow);
+  display:flex; flex-direction:column; gap:4px;
+}
+.mkt-kpi-label { font-size:11px; font-weight:600; color:var(--c-muted); text-transform:uppercase; letter-spacing:.5px; }
+.mkt-kpi-value { font-size:26px; font-weight:700; color:var(--c-txt); line-height:1.1; }
+.mkt-kpi-sub   { font-size:11px; color:var(--c-txt2); }
+.mkt-kpi-icon  {
+  width:34px; height:34px; border-radius:8px;
+  display:flex; align-items:center; justify-content:center; margin-bottom:6px;
+}
+
+.camp-filters {
+  display:flex; align-items:center; gap:6px; margin-bottom:12px; flex-wrap:wrap;
+}
+.camp-tab {
+  padding:6px 12px; border-radius:6px;
+  font-size:12px; font-weight:600; color:var(--c-txt2); cursor:pointer;
+  border:1px solid var(--c-border); background:var(--c-surface);
+  transition:all .12s;
+}
+.camp-tab:hover { color:var(--c-txt); }
+.camp-tab.active { background:var(--c-txt); color:white; border-color:var(--c-txt); }
+.camp-tab .tc { font-size:10px; font-weight:700; background:rgba(255,255,255,.25); color:inherit; padding:0 5px; border-radius:8px; margin-left:4px; }
+.camp-tab:not(.active) .tc { background:var(--c-bg); color:var(--c-muted); }
+
+.camp-table-surface {
+  background:var(--c-surface); border:1px solid var(--c-border);
+  border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow);
+}
+.camp-table { width:100%; border-collapse:collapse; font-size:13px; }
+.camp-table thead th {
+  padding:10px 14px; text-align:left;
+  font-size:11px; font-weight:600; text-transform:uppercase;
+  letter-spacing:.5px; color:var(--c-muted);
+  background:var(--c-bg); border-bottom:1px solid var(--c-border);
+  white-space:nowrap;
+}
+.camp-table tbody td {
+  padding:12px 14px; border-bottom:1px solid var(--c-border);
+  vertical-align:middle;
+}
+.camp-table tbody tr:last-child td { border-bottom:none; }
+.camp-table tbody tr:hover { background:#FAFAF9; }
+
+.camp-name { font-weight:600; font-size:13px; }
+.camp-seg  { font-size:11px; color:var(--c-txt2); margin-top:2px; line-height:1.4; }
+.camp-status {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:11px; font-weight:600;
+  padding:3px 9px; border-radius:20px;
+}
+.camp-status.enviada   { background:var(--c-green-bg); color:var(--c-green-dk); }
+.camp-status.programada{ background:var(--c-blue-bg); color:var(--c-blue); }
+.camp-status.borrador  { background:var(--c-gold-bg); color:#92560c; }
+.camp-status-dot { width:6px; height:6px; border-radius:50%; background:currentColor; }
+
+.camp-kpi-cell { text-align:right; }
+.camp-kpi-num  { font-weight:700; font-size:14px; }
+.camp-kpi-pct  { font-size:11px; color:var(--c-txt2); margin-top:1px; }
+.camp-kpi-na   { font-size:12px; color:var(--c-muted); }
+.camp-ventas   { font-weight:700; font-size:13px; color:var(--c-green-dk); }
+
+.camp-interest-tags { display:flex; flex-wrap:wrap; gap:4px; }
+.camp-itag {
+  font-size:10px; font-weight:600;
+  padding:2px 7px; border-radius:20px;
+  background:var(--c-purple-bg); color:var(--c-purple);
+}
+.camp-store-chip {
+  font-size:11px; font-weight:500; padding:2px 8px; border-radius:20px; white-space:nowrap;
+}
+.camp-store-chip.all    { background:var(--c-brand-bg); color:var(--c-brand-txt); }
+.camp-store-chip.fisica { background:var(--c-gold-bg); color:#92560c; }
+.camp-store-chip.online { background:var(--c-blue-bg); color:var(--c-blue); }
+
+/* Campaign creation modal */
+.mkt-modal-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,.45);
+  z-index:500; display:none; align-items:center; justify-content:center;
+}
+.mkt-modal-overlay.open { display:flex; }
+.mkt-modal {
+  background:var(--c-surface); border-radius:14px;
+  width:640px; max-width:95vw; max-height:92vh;
+  display:flex; flex-direction:column;
+  box-shadow:0 20px 60px rgba(0,0,0,.2);
+  overflow:hidden;
+}
+.mkt-modal-head {
+  padding:20px 24px 0;
+  display:flex; align-items:flex-start; justify-content:space-between;
+}
+.mkt-modal-title { font-size:17px; font-weight:700; }
+.mkt-modal-close {
+  width:30px; height:30px; border:none; background:none;
+  font-size:20px; cursor:pointer; color:var(--c-muted);
+  display:flex; align-items:center; justify-content:center;
+  border-radius:6px; flex-shrink:0;
+}
+.mkt-modal-close:hover { background:var(--c-bg); color:var(--c-txt); }
+.mkt-steps {
+  display:flex; align-items:center; gap:0;
+  padding:18px 24px 0; margin-bottom:4px;
+}
+.mkt-step {
+  display:flex; align-items:center; gap:8px;
+  font-size:12px; font-weight:600; color:var(--c-muted);
+}
+.mkt-step.active { color:var(--c-brand); }
+.mkt-step.done   { color:var(--c-green-dk); }
+.mkt-step-num {
+  width:24px; height:24px; border-radius:50%;
+  background:var(--c-border); color:var(--c-muted);
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:700; flex-shrink:0;
+}
+.mkt-step.active .mkt-step-num { background:var(--c-brand); color:white; }
+.mkt-step.done .mkt-step-num   { background:var(--c-green); color:white; }
+.mkt-step-line { flex:1; height:2px; background:var(--c-border); margin:0 8px; }
+.mkt-step-line.done { background:var(--c-green); }
+
+.mkt-modal-body { padding:20px 24px; overflow-y:auto; flex:1; }
+.mkt-modal-foot {
+  padding:16px 24px;
+  border-top:1px solid var(--c-border);
+  display:flex; justify-content:space-between; gap:10px;
+}
+.mkt-step-panel { display:none; }
+.mkt-step-panel.active { display:block; }
+
+.mkt-field { margin-bottom:16px; }
+.mkt-field label { display:block; font-size:12px; font-weight:600; color:var(--c-txt2); margin-bottom:5px; }
+.mkt-field input, .mkt-field select, .mkt-field textarea {
+  width:100%; padding:9px 12px;
+  border:1px solid var(--c-border); border-radius:8px;
+  font-size:13px; font-family:'Inter',sans-serif; color:var(--c-txt);
+  background:var(--c-surface); outline:none; transition:border-color .15s;
+}
+.mkt-field input:focus, .mkt-field select:focus, .mkt-field textarea:focus {
+  border-color:var(--c-brand);
+}
+.mkt-field textarea { resize:vertical; min-height:100px; line-height:1.5; }
+
+.mkt-type-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.mkt-type-opt {
+  border:2px solid var(--c-border); border-radius:10px;
+  padding:14px 10px; cursor:pointer; text-align:center;
+  transition:all .15s;
+}
+.mkt-type-opt:hover { border-color:var(--c-brand); background:var(--c-brand-bg); }
+.mkt-type-opt.selected { border-color:var(--c-brand); background:var(--c-brand-bg); }
+.mkt-type-opt .mkt-type-icon { font-size:22px; margin-bottom:6px; }
+.mkt-type-opt .mkt-type-name { font-size:12px; font-weight:600; }
+.mkt-type-opt .mkt-type-desc { font-size:11px; color:var(--c-txt2); margin-top:2px; }
+
+.mkt-discount-row { display:flex; gap:10px; align-items:flex-end; }
+.mkt-discount-row .mkt-field { flex:1; margin-bottom:0; }
+.mkt-code-preview {
+  background:var(--c-gold-bg); border:1px dashed var(--c-gold);
+  border-radius:8px; padding:10px 14px;
+  display:flex; align-items:center; gap:10px;
+  margin-top:10px; font-size:13px;
+}
+.mkt-code-preview.hidden { display:none; }
+.mkt-code-val { font-family:'DM Mono',monospace; font-weight:700; font-size:15px; color:#92560c; }
+.mkt-code-copy { font-size:11px; color:var(--c-muted); cursor:pointer; }
+
+.mkt-seg-section { margin-bottom:20px; }
+.mkt-seg-title { font-size:13px; font-weight:700; margin-bottom:10px; color:var(--c-txt); }
+.mkt-interest-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.mkt-chk-item {
+  display:flex; align-items:center; gap:7px;
+  padding:8px 10px; border:1px solid var(--c-border);
+  border-radius:8px; cursor:pointer; transition:all .12s;
+  font-size:12px; font-weight:500;
+}
+.mkt-chk-item:hover { border-color:var(--c-brand); background:var(--c-brand-bg); }
+.mkt-chk-item input[type=checkbox] { accent-color:var(--c-brand); width:14px; height:14px; flex-shrink:0; }
+.mkt-seg-estimated {
+  background:var(--c-bg); border:1px solid var(--c-border);
+  border-radius:8px; padding:10px 14px; margin-top:12px;
+  font-size:12px; color:var(--c-txt2);
+  display:flex; align-items:center; gap:8px;
+}
+.mkt-seg-est-num { font-weight:700; font-size:15px; color:var(--c-brand); }
+
+/* Preview panel */
+.mkt-preview-wrap { display:flex; gap:16px; }
+.mkt-preview-phone {
+  width:220px; flex-shrink:0;
+  background:#E5DDD5;
+  border-radius:14px; padding:12px;
+  border:1px solid var(--c-border); box-shadow:var(--shadow-md);
+}
+.mkt-preview-phone-bar {
+  background:#075E54; border-radius:8px 8px 0 0;
+  padding:8px 10px; margin:-12px -12px 10px;
+  display:flex; align-items:center; gap:8px;
+}
+.mkt-preview-phone-bar .av { width:28px; height:28px; border-radius:50%; background:var(--c-brand); display:flex; align-items:center; justify-content:center; font-size:12px; color:white; font-weight:700; }
+.mkt-preview-phone-bar .name { font-size:12px; font-weight:600; color:white; }
+.mkt-preview-bubble {
+  background:white; border-radius:0 10px 10px 10px;
+  padding:8px 10px; font-size:11px; line-height:1.5; color:#111;
+  box-shadow:0 1px 2px rgba(0,0,0,.1); max-width:100%;
+  word-break:break-word;
+}
+.mkt-preview-ts { font-size:10px; color:var(--c-muted); margin-top:4px; text-align:right; }
+.mkt-preview-discount-tag {
+  display:inline-block; background:var(--c-gold-bg); color:#92560c;
+  border:1px solid var(--c-gold); border-radius:6px;
+  font-size:10px; font-weight:700; font-family:'DM Mono',monospace;
+  padding:2px 7px; margin-top:6px;
+}
+.mkt-preview-info { flex:1; }
+.mkt-preview-summary-row { display:flex; flex-direction:column; gap:12px; }
+.mkt-summary-item { display:flex; flex-direction:column; gap:2px; }
+.mkt-summary-label { font-size:11px; font-weight:600; color:var(--c-muted); text-transform:uppercase; letter-spacing:.5px; }
+.mkt-summary-val { font-size:13px; font-weight:500; color:var(--c-txt); }
+.mkt-summary-tags { display:flex; flex-wrap:wrap; gap:4px; margin-top:4px; }
+
+.mkt-schedule-row { display:flex; gap:10px; align-items:flex-end; }
+.mkt-schedule-row .mkt-field { flex:1; margin-bottom:0; }
 </style>
 </head>
 <body>
@@ -1465,7 +1696,7 @@ body {
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             Clientes
           </a>
-          <a class="nav-item" onclick="navigate('respuestas')">
+          <a class="nav-item" onclick="navigate('marketing')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
             Marketing
             <span class="nav-badge amber">3</span>
@@ -2012,6 +2243,275 @@ body {
             <div class="response-acts">
               <button class="product-btn edit">Editar</button>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MARKETING ── -->
+    <div class="view" id="view-marketing">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Marketing</div>
+          <div class="page-sub">Campañas de mensajes WhatsApp segmentadas para tu base de clientes</div>
+        </div>
+        <button class="btn btn-primary" onclick="openMktModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nueva Campaña
+        </button>
+      </div>
+
+      <!-- KPIs -->
+      <div class="mkt-kpi-row">
+        <div class="mkt-kpi">
+          <div class="mkt-kpi-icon" style="background:var(--c-brand-bg)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--c-brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="mkt-kpi-label">Campañas enviadas</div>
+          <div class="mkt-kpi-value">12</div>
+          <div class="mkt-kpi-sub">Últimos 90 días</div>
+        </div>
+        <div class="mkt-kpi">
+          <div class="mkt-kpi-icon" style="background:var(--c-blue-bg)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--c-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="mkt-kpi-label">Usuarios alcanzados</div>
+          <div class="mkt-kpi-value">1.847</div>
+          <div class="mkt-kpi-sub">Total acumulado</div>
+        </div>
+        <div class="mkt-kpi">
+          <div class="mkt-kpi-icon" style="background:var(--c-green-bg)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--c-green-dk)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div class="mkt-kpi-label">Tasa de respuesta media</div>
+          <div class="mkt-kpi-value">34%</div>
+          <div class="mkt-kpi-sub">+6% vs. mes anterior</div>
+        </div>
+        <div class="mkt-kpi">
+          <div class="mkt-kpi-icon" style="background:var(--c-gold-bg)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--c-gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="mkt-kpi-label">Ventas generadas (online)</div>
+          <div class="mkt-kpi-value">€9.340</div>
+          <div class="mkt-kpi-sub">Atribuidas a campañas</div>
+        </div>
+      </div>
+
+      <!-- Filter tabs -->
+      <div class="camp-filters">
+        <button class="camp-tab active" onclick="filterCamp(this,'all')">Todas <span class="tc">12</span></button>
+        <button class="camp-tab" onclick="filterCamp(this,'enviada')">Enviadas <span class="tc">9</span></button>
+        <button class="camp-tab" onclick="filterCamp(this,'programada')">Programadas <span class="tc">2</span></button>
+        <button class="camp-tab" onclick="filterCamp(this,'borrador')">Borradores <span class="tc">1</span></button>
+      </div>
+
+      <!-- Table -->
+      <div class="camp-table-surface">
+        <table class="camp-table">
+          <thead>
+            <tr>
+              <th>Campaña</th>
+              <th>Tipo</th>
+              <th>Segmentación</th>
+              <th>Estado</th>
+              <th style="text-align:right">Contactados</th>
+              <th style="text-align:right">Tasa respuesta</th>
+              <th style="text-align:right">Ventas generadas</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="camp-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CAMPAIGN MODAL -->
+    <div class="mkt-modal-overlay" id="mkt-modal-overlay" onclick="closeMktModalIfBg(event)">
+      <div class="mkt-modal">
+        <div class="mkt-modal-head">
+          <div>
+            <div class="mkt-modal-title">Nueva Campaña</div>
+          </div>
+          <button class="mkt-modal-close" onclick="closeMktModal()">×</button>
+        </div>
+
+        <!-- Step indicators -->
+        <div class="mkt-steps">
+          <div class="mkt-step active" id="mstep-1">
+            <div class="mkt-step-num">1</div>
+            <span>Mensaje</span>
+          </div>
+          <div class="mkt-step-line" id="mstep-line-1"></div>
+          <div class="mkt-step" id="mstep-2">
+            <div class="mkt-step-num">2</div>
+            <span>Segmentación</span>
+          </div>
+          <div class="mkt-step-line" id="mstep-line-2"></div>
+          <div class="mkt-step" id="mstep-3">
+            <div class="mkt-step-num">3</div>
+            <span>Revisar y enviar</span>
+          </div>
+        </div>
+
+        <div class="mkt-modal-body">
+          <!-- STEP 1: Message -->
+          <div class="mkt-step-panel active" id="mpanel-1">
+            <div class="mkt-field">
+              <label>Nombre de la campaña *</label>
+              <input type="text" id="mkt-nombre" placeholder="Ej. Promo drivers mayo 2026">
+            </div>
+            <div class="mkt-field">
+              <label>Tipo de campaña</label>
+              <div class="mkt-type-grid">
+                <div class="mkt-type-opt selected" onclick="selectMktType(this,'online')">
+                  <div class="mkt-type-icon">🌐</div>
+                  <div class="mkt-type-name">Online</div>
+                  <div class="mkt-type-desc">Tienda web · con código descuento</div>
+                </div>
+                <div class="mkt-type-opt" onclick="selectMktType(this,'fisica')">
+                  <div class="mkt-type-icon">🏪</div>
+                  <div class="mkt-type-name">Tienda física</div>
+                  <div class="mkt-type-desc">Visita al local · sin descuento</div>
+                </div>
+                <div class="mkt-type-opt" onclick="selectMktType(this,'ambas')">
+                  <div class="mkt-type-icon">⛳</div>
+                  <div class="mkt-type-name">Ambas</div>
+                  <div class="mkt-type-desc">Online + tienda física</div>
+                </div>
+              </div>
+            </div>
+            <div class="mkt-field">
+              <label>Mensaje de WhatsApp *</label>
+              <textarea id="mkt-mensaje" placeholder="Ej. ¡Hola {nombre}! Tenemos una oferta especial en drivers que te va a encantar 🏌️‍♂️ Aprovechá esta semana..." oninput="updateMktPreview()"></textarea>
+              <div style="font-size:11px;color:var(--c-muted);margin-top:4px">Podés usar <code style="background:var(--c-bg);padding:1px 4px;border-radius:3px">{nombre}</code> para personalizar con el nombre del contacto.</div>
+            </div>
+            <div id="mkt-discount-section">
+              <div class="mkt-field" style="margin-bottom:8px">
+                <label>Código de descuento (opcional)</label>
+                <div class="mkt-discount-row">
+                  <div class="mkt-field">
+                    <input type="text" id="mkt-codigo" placeholder="Ej. DRIVERS10" oninput="updateMktCode()" style="text-transform:uppercase;font-family:'DM Mono',monospace;font-weight:600;letter-spacing:1px">
+                  </div>
+                  <div class="mkt-field">
+                    <input type="text" id="mkt-descuento" placeholder="Ej. 10% descuento" oninput="updateMktCode()">
+                  </div>
+                </div>
+              </div>
+              <div class="mkt-code-preview hidden" id="mkt-code-preview">
+                <span>🏷️</span>
+                <div>
+                  <div class="mkt-code-val" id="mkt-code-val"></div>
+                  <div style="font-size:11px;color:var(--c-muted)" id="mkt-code-desc"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2: Segmentation -->
+          <div class="mkt-step-panel" id="mpanel-2">
+            <div class="mkt-seg-section">
+              <div class="mkt-seg-title">Segmentar por interés</div>
+              <div style="font-size:12px;color:var(--c-txt2);margin-bottom:10px">Seleccioná los intereses detectados en las conversaciones de tus clientes</div>
+              <div class="mkt-interest-grid">
+                <label class="mkt-chk-item"><input type="checkbox" name="mkt-interest" value="Drivers" onchange="updateMktEstimate()"> Drivers</label>
+                <label class="mkt-chk-item"><input type="checkbox" name="mkt-interest" value="Hierros" onchange="updateMktEstimate()"> Hierros</label>
+                <label class="mkt-chk-item"><input type="checkbox" name="mkt-interest" value="Maderas" onchange="updateMktEstimate()"> Maderas</label>
+                <label class="mkt-chk-item"><input type="checkbox" name="mkt-interest" value="Wedges" onchange="updateMktEstimate()"> Wedges</label>
+                <label class="mkt-chk-item"><input type="checkbox" name="mkt-interest" value="Putters" onchange="updateMktEstimate()"> Putters</label>
+                <label class="mkt-chk-item"><input type="checkbox" name="mkt-interest" value="Bolsas" onchange="updateMktEstimate()"> Bolsas</label>
+                <label class="mkt-chk-item"><input type="checkbox" name="mkt-interest" value="Ropa golf" onchange="updateMktEstimate()"> Ropa golf</label>
+                <label class="mkt-chk-item"><input type="checkbox" name="mkt-interest" value="Calzado" onchange="updateMktEstimate()"> Calzado</label>
+              </div>
+              <div style="font-size:12px;color:var(--c-muted);margin-top:6px">Si no seleccionás ninguno, se envía a toda la base.</div>
+            </div>
+            <div class="mkt-seg-section">
+              <div class="mkt-seg-title">Segmentar por tienda</div>
+              <div class="mkt-field">
+                <select id="mkt-tienda" onchange="updateMktEstimate()">
+                  <option value="all">Todas las tiendas</option>
+                  <option value="madrid-centro">Madrid Centro</option>
+                  <option value="barcelona">Barcelona</option>
+                  <option value="online">Solo online</option>
+                </select>
+              </div>
+            </div>
+            <div class="mkt-seg-estimated">
+              <span style="font-size:18px">👥</span>
+              <div>
+                <div>Audiencia estimada: <span class="mkt-seg-est-num" id="mkt-est-num">1.847</span> contactos</div>
+                <div style="font-size:11px;margin-top:1px">Basado en conversaciones y preferencias registradas</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 3: Preview & send -->
+          <div class="mkt-step-panel" id="mpanel-3">
+            <div class="mkt-preview-wrap">
+              <!-- Phone mockup -->
+              <div class="mkt-preview-phone">
+                <div class="mkt-preview-phone-bar">
+                  <div class="av">D</div>
+                  <div class="name">Depique</div>
+                </div>
+                <div class="mkt-preview-bubble" id="mkt-preview-bubble">
+                  Escribe el mensaje en el paso anterior para ver la vista previa.
+                </div>
+                <div class="mkt-preview-discount-tag hidden" id="mkt-preview-discount-tag"></div>
+                <div class="mkt-preview-ts">Ahora ✓✓</div>
+              </div>
+
+              <!-- Summary -->
+              <div class="mkt-preview-info">
+                <div style="font-size:13px;font-weight:700;margin-bottom:14px;color:var(--c-txt)">Resumen de la campaña</div>
+                <div class="mkt-preview-summary-row">
+                  <div class="mkt-summary-item">
+                    <div class="mkt-summary-label">Nombre</div>
+                    <div class="mkt-summary-val" id="mkt-sum-nombre">—</div>
+                  </div>
+                  <div class="mkt-summary-item">
+                    <div class="mkt-summary-label">Tipo</div>
+                    <div class="mkt-summary-val" id="mkt-sum-tipo">—</div>
+                  </div>
+                  <div class="mkt-summary-item">
+                    <div class="mkt-summary-label">Código descuento</div>
+                    <div class="mkt-summary-val" id="mkt-sum-codigo">Sin código</div>
+                  </div>
+                  <div class="mkt-summary-item">
+                    <div class="mkt-summary-label">Intereses</div>
+                    <div class="mkt-summary-tags" id="mkt-sum-interests"></div>
+                  </div>
+                  <div class="mkt-summary-item">
+                    <div class="mkt-summary-label">Tienda</div>
+                    <div class="mkt-summary-val" id="mkt-sum-tienda">Todas las tiendas</div>
+                  </div>
+                  <div class="mkt-summary-item">
+                    <div class="mkt-summary-label">Audiencia estimada</div>
+                    <div class="mkt-summary-val" style="font-weight:700;color:var(--c-brand)" id="mkt-sum-audiencia">1.847 contactos</div>
+                  </div>
+                </div>
+                <div style="margin-top:16px">
+                  <div class="mkt-field">
+                    <label>Programar envío (opcional)</label>
+                    <div class="mkt-schedule-row">
+                      <div class="mkt-field">
+                        <input type="date" id="mkt-fecha">
+                      </div>
+                      <div class="mkt-field">
+                        <input type="time" id="mkt-hora" value="09:00">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mkt-modal-foot">
+          <button class="btn btn-ghost" id="mkt-btn-back" onclick="mktStepBack()" style="display:none">← Atrás</button>
+          <div style="display:flex;gap:10px;margin-left:auto">
+            <button class="btn btn-ghost" onclick="closeMktModal()">Cancelar</button>
+            <button class="btn btn-primary" id="mkt-btn-next" onclick="mktStepNext()">Siguiente →</button>
           </div>
         </div>
       </div>
@@ -3003,6 +3503,337 @@ function showConvTable() {
 }
 
 renderConvTable('all');
+
+/* ══════════════ MARKETING ══════════════ */
+const CAMP_DATA = [
+  {
+    id:'C012', nombre:'Flash Sale Drivers Mayo',
+    tipo:'online', status:'enviada',
+    seg:['Drivers','Maderas'], tienda:'all',
+    fecha:'21/04/2026', contactados:312,
+    respondidos:114, ventas:2840,
+  },
+  {
+    id:'C011', nombre:'Restock Hierros Titleist',
+    tipo:'fisica', status:'enviada',
+    seg:['Hierros'], tienda:'Madrid Centro',
+    fecha:'14/04/2026', contactados:198,
+    respondidos:61, ventas:null,
+  },
+  {
+    id:'C010', nombre:'Temporada Ropa Primavera',
+    tipo:'ambas', status:'enviada',
+    seg:['Ropa golf','Calzado'], tienda:'all',
+    fecha:'05/04/2026', contactados:487,
+    respondidos:143, ventas:1620,
+  },
+  {
+    id:'C009', nombre:'Oferta Putters TaylorMade',
+    tipo:'online', status:'enviada',
+    seg:['Putters'], tienda:'all',
+    fecha:'28/03/2026', contactados:241,
+    respondidos:87, ventas:1290,
+  },
+  {
+    id:'C008', nombre:'Liquidación fin temporada',
+    tipo:'ambas', status:'enviada',
+    seg:[], tienda:'all',
+    fecha:'15/03/2026', contactados:1847,
+    respondidos:591, ventas:3590,
+  },
+  {
+    id:'C007', nombre:'Promo Wedges Callaway',
+    tipo:'online', status:'enviada',
+    seg:['Wedges'], tienda:'Barcelona',
+    fecha:'02/03/2026', contactados:156,
+    respondidos:52, ventas:420,
+  },
+  {
+    id:'C006', nombre:'Bolsas y trolleys verano',
+    tipo:'fisica', status:'enviada',
+    seg:['Bolsas'], tienda:'all',
+    fecha:'20/02/2026', contactados:89,
+    respondidos:19, ventas:null,
+  },
+  {
+    id:'C005', nombre:'Drivers temporada 2026',
+    tipo:'online', status:'enviada',
+    seg:['Drivers'], tienda:'all',
+    fecha:'10/02/2026', contactados:274,
+    respondidos:101, ventas:2140,
+  },
+  {
+    id:'C004', nombre:'Pelotas + accesorios pack',
+    tipo:'ambas', status:'enviada',
+    seg:[], tienda:'Madrid Centro',
+    fecha:'01/02/2026', contactados:143,
+    respondidos:38, ventas:460,
+  },
+  {
+    id:'C003', nombre:'Campaña apertura Barcelona',
+    tipo:'fisica', status:'programada',
+    seg:[], tienda:'Barcelona',
+    fecha:'28/04/2026', contactados:null,
+    respondidos:null, ventas:null,
+  },
+  {
+    id:'C002', nombre:'Flash Maderas fin de semana',
+    tipo:'online', status:'programada',
+    seg:['Maderas'], tienda:'all',
+    fecha:'26/04/2026', contactados:null,
+    respondidos:null, ventas:null,
+  },
+  {
+    id:'C001', nombre:'Newsletter mayo (borrador)',
+    tipo:'ambas', status:'borrador',
+    seg:[], tienda:'all',
+    fecha:'—', contactados:null,
+    respondidos:null, ventas:null,
+  },
+];
+
+function renderCampTable(filter) {
+  const tbody = document.getElementById('camp-tbody');
+  if (!tbody) return;
+  const rows = filter === 'all' ? CAMP_DATA : CAMP_DATA.filter(c => c.status === filter);
+
+  const tipoLabel = { online:'🌐 Online', fisica:'🏪 Física', ambas:'⛳ Ambas' };
+  const tiendaLabel = { all:'Todas las tiendas' };
+
+  tbody.innerHTML = rows.map(c => {
+    const tLbl = tiendaLabel[c.tienda] || c.tienda;
+    const segTags = c.seg.length
+      ? c.seg.map(s=>`<span class="camp-itag">${s}</span>`).join('')
+      : `<span style="font-size:11px;color:var(--c-muted)">Toda la base</span>`;
+    const storeChip = c.tienda === 'all'
+      ? `<span class="camp-store-chip all">Todas</span>`
+      : c.tipo === 'online'
+        ? `<span class="camp-store-chip online">${tLbl}</span>`
+        : `<span class="camp-store-chip fisica">${tLbl}</span>`;
+
+    const statusMap = {
+      enviada:   `<span class="camp-status enviada"><span class="camp-status-dot"></span>Enviada</span>`,
+      programada:`<span class="camp-status programada"><span class="camp-status-dot"></span>Programada</span>`,
+      borrador:  `<span class="camp-status borrador"><span class="camp-status-dot"></span>Borrador</span>`,
+    };
+
+    const contactCell = c.contactados !== null
+      ? `<div class="camp-kpi-num" style="text-align:right">${c.contactados.toLocaleString('es-ES')}</div><div class="camp-kpi-pct">${c.fecha}</div>`
+      : `<div class="camp-kpi-na" style="text-align:right">—</div>`;
+
+    const pct = c.respondidos !== null && c.contactados
+      ? Math.round(c.respondidos / c.contactados * 100) : null;
+    const respCell = pct !== null
+      ? `<div class="camp-kpi-num" style="text-align:right">${pct}%</div><div class="camp-kpi-pct">${c.respondidos} respuestas</div>`
+      : `<div class="camp-kpi-na" style="text-align:right">—</div>`;
+
+    const ventasCell = c.ventas !== null
+      ? `<div class="camp-ventas" style="text-align:right">€${c.ventas.toLocaleString('es-ES')}</div>`
+      : c.tipo === 'fisica'
+        ? `<div class="camp-kpi-na" style="text-align:right;font-size:10px">N/A (física)</div>`
+        : `<div class="camp-kpi-na" style="text-align:right">—</div>`;
+
+    return `<tr>
+      <td>
+        <div class="camp-name">${c.nombre}</div>
+        <div class="camp-seg">${c.id}</div>
+      </td>
+      <td style="white-space:nowrap;font-size:12px">${tipoLabel[c.tipo]}</td>
+      <td>
+        <div class="camp-interest-tags">${segTags}</div>
+        <div style="margin-top:4px">${storeChip}</div>
+      </td>
+      <td>${statusMap[c.status]}</td>
+      <td class="camp-kpi-cell">${contactCell}</td>
+      <td class="camp-kpi-cell">${respCell}</td>
+      <td class="camp-kpi-cell">${ventasCell}</td>
+      <td><button class="btn btn-ghost btn-xs">Ver →</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function filterCamp(btn, type) {
+  document.querySelectorAll('.camp-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCampTable(type);
+}
+
+/* ── Campaign modal ── */
+let mktStep = 1;
+let mktType = 'online';
+
+function openMktModal() {
+  mktStep = 1;
+  mktType = 'online';
+  document.getElementById('mkt-nombre').value = '';
+  document.getElementById('mkt-mensaje').value = '';
+  document.getElementById('mkt-codigo').value = '';
+  document.getElementById('mkt-descuento').value = '';
+  document.getElementById('mkt-code-preview').classList.add('hidden');
+  document.getElementById('mkt-preview-bubble').textContent = 'Escribe el mensaje en el paso anterior para ver la vista previa.';
+  document.getElementById('mkt-preview-discount-tag').classList.add('hidden');
+  document.querySelectorAll('[name="mkt-interest"]').forEach(c => c.checked = false);
+  document.getElementById('mkt-tienda').value = 'all';
+  updateMktEstimate();
+  renderMktSteps();
+  document.getElementById('mkt-modal-overlay').classList.add('open');
+}
+
+function closeMktModal() {
+  document.getElementById('mkt-modal-overlay').classList.remove('open');
+}
+
+function closeMktModalIfBg(e) {
+  if (e.target === document.getElementById('mkt-modal-overlay')) closeMktModal();
+}
+
+function renderMktSteps() {
+  [1,2,3].forEach(n => {
+    const el  = document.getElementById(`mstep-${n}`);
+    const pan = document.getElementById(`mpanel-${n}`);
+    el.className  = 'mkt-step' + (n < mktStep ? ' done' : n === mktStep ? ' active' : '');
+    pan.className = 'mkt-step-panel' + (n === mktStep ? ' active' : '');
+    if (n < 3) {
+      const line = document.getElementById(`mstep-line-${n}`);
+      line.className = 'mkt-step-line' + (n < mktStep ? ' done' : '');
+    }
+  });
+  const back = document.getElementById('mkt-btn-back');
+  const next = document.getElementById('mkt-btn-next');
+  back.style.display = mktStep === 1 ? 'none' : '';
+  next.textContent = mktStep === 3 ? '✓ Enviar campaña' : 'Siguiente →';
+}
+
+function mktStepNext() {
+  if (mktStep === 3) { sendCampaign(); return; }
+  if (mktStep === 2) updateMktSummary();
+  mktStep++;
+  renderMktSteps();
+}
+function mktStepBack() {
+  if (mktStep > 1) { mktStep--; renderMktSteps(); }
+}
+
+function selectMktType(el, type) {
+  document.querySelectorAll('.mkt-type-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  mktType = type;
+  const discSec = document.getElementById('mkt-discount-section');
+  discSec.style.opacity = (type === 'fisica') ? '.4' : '1';
+  discSec.style.pointerEvents = (type === 'fisica') ? 'none' : '';
+}
+
+function updateMktCode() {
+  const code = document.getElementById('mkt-codigo').value.toUpperCase().trim();
+  const desc = document.getElementById('mkt-descuento').value.trim();
+  const preview = document.getElementById('mkt-code-preview');
+  if (code) {
+    preview.classList.remove('hidden');
+    document.getElementById('mkt-code-val').textContent = code;
+    document.getElementById('mkt-code-desc').textContent = desc || 'Código de descuento';
+  } else {
+    preview.classList.add('hidden');
+  }
+}
+
+function updateMktPreview() {
+  const msg  = document.getElementById('mkt-mensaje').value || 'Escribe el mensaje en el paso anterior para ver la vista previa.';
+  const code = document.getElementById('mkt-codigo').value.toUpperCase().trim();
+  document.getElementById('mkt-preview-bubble').textContent = msg.replace('{nombre}', 'Carlos');
+  const dtag = document.getElementById('mkt-preview-discount-tag');
+  if (code) { dtag.textContent = '🏷️ ' + code; dtag.classList.remove('hidden'); }
+  else       { dtag.classList.add('hidden'); }
+}
+
+function updateMktEstimate() {
+  const selected = document.querySelectorAll('[name="mkt-interest"]:checked').length;
+  const tienda   = document.getElementById('mkt-tienda') ? document.getElementById('mkt-tienda').value : 'all';
+  let base = 1847;
+  if (selected > 0) base = Math.round(base * (0.15 + selected * 0.08));
+  if (tienda !== 'all') base = Math.round(base * 0.42);
+  document.getElementById('mkt-est-num').textContent = base.toLocaleString('es-ES');
+}
+
+function updateMktSummary() {
+  const nombre   = document.getElementById('mkt-nombre').value || '(sin nombre)';
+  const codigo   = document.getElementById('mkt-codigo').value.toUpperCase().trim();
+  const desc     = document.getElementById('mkt-descuento').value.trim();
+  const tienda   = document.getElementById('mkt-tienda');
+  const tiendaLbl = tienda ? tienda.options[tienda.selectedIndex].text : 'Todas las tiendas';
+  const interests = [...document.querySelectorAll('[name="mkt-interest"]:checked')].map(c=>c.value);
+  const estNum    = document.getElementById('mkt-est-num').textContent;
+  const tipoLbl   = { online:'🌐 Online', fisica:'🏪 Tienda física', ambas:'⛳ Ambas' };
+  const msg = document.getElementById('mkt-mensaje').value || '';
+
+  document.getElementById('mkt-sum-nombre').textContent    = nombre;
+  document.getElementById('mkt-sum-tipo').textContent      = tipoLbl[mktType];
+  document.getElementById('mkt-sum-tienda').textContent    = tiendaLbl;
+  document.getElementById('mkt-sum-audiencia').textContent = estNum + ' contactos';
+  document.getElementById('mkt-sum-codigo').textContent    = codigo ? `${codigo}${desc ? ' – ' + desc : ''}` : 'Sin código';
+
+  const interestEl = document.getElementById('mkt-sum-interests');
+  interestEl.innerHTML = interests.length
+    ? interests.map(i=>`<span class="camp-itag">${i}</span>`).join('')
+    : `<span style="font-size:12px;color:var(--c-muted)">Toda la base</span>`;
+
+  // update phone preview
+  document.getElementById('mkt-preview-bubble').textContent = msg.replace('{nombre}','Carlos') || '(mensaje vacío)';
+  const dtag = document.getElementById('mkt-preview-discount-tag');
+  if (codigo) { dtag.textContent = '🏷️ ' + codigo; dtag.classList.remove('hidden'); }
+  else        { dtag.classList.add('hidden'); }
+}
+
+function sendCampaign() {
+  const nombre = document.getElementById('mkt-nombre').value.trim();
+  if (!nombre) { alert('Ingresá un nombre para la campaña.'); return; }
+  const fecha  = document.getElementById('mkt-fecha') ? document.getElementById('mkt-fecha').value : '';
+  const hora   = document.getElementById('mkt-hora')  ? document.getElementById('mkt-hora').value  : '';
+  const isScheduled = !!(fecha && hora);
+
+  // Prepend to table data (simulated)
+  const code = document.getElementById('mkt-codigo').value.toUpperCase().trim();
+  const interests = [...document.querySelectorAll('[name="mkt-interest"]:checked')].map(c=>c.value);
+  const tienda  = document.getElementById('mkt-tienda').value;
+  const estNum  = parseInt(document.getElementById('mkt-est-num').textContent.replace('.','').replace(',','')) || 0;
+
+  CAMP_DATA.unshift({
+    id: 'C' + String(CAMP_DATA.length + 1).padStart(3,'0'),
+    nombre,
+    tipo: mktType,
+    status: isScheduled ? 'programada' : 'enviada',
+    seg: interests,
+    tienda,
+    fecha: isScheduled ? `${fecha} ${hora}` : (new Date().toLocaleDateString('es-ES')),
+    contactados: isScheduled ? null : estNum,
+    respondidos: null,
+    ventas: null,
+  });
+
+  renderCampTable('all');
+  closeMktModal();
+
+  // Flash success
+  const msg = isScheduled
+    ? `Campaña "${nombre}" programada para el ${fecha} a las ${hora}.`
+    : `Campaña "${nombre}" enviada a ${estNum.toLocaleString('es-ES')} contactos.`;
+  showToast(msg);
+}
+
+function showToast(msg) {
+  let t = document.getElementById('toast-msg');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast-msg';
+    t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1A1A18;color:white;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:500;z-index:9999;max-width:420px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.3);';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.style.opacity = '0'; }, 3500);
+}
+
+renderCampTable('all');
 </script>
 
 <!-- Drawer overlay -->
