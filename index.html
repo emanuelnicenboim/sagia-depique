@@ -2007,14 +2007,13 @@ body {
       <div class="full-mb">
         <div class="chart-card">
           <div class="chart-head">
-            <div id="chart-title" class="card-title">Ventas por mes · últimos 8 meses (en miles €)</div>
+            <div id="chart-title" class="card-title">Ventas por tienda · este mes (en miles €)</div>
             <div class="chart-legend">
-              <div class="legend-item"><div class="legend-line" style="background:var(--c-brand);height:3px"></div>Total red</div>
-              <div class="legend-item"><div class="legend-line" style="background:#475569"></div>Madrid</div>
-              <div class="legend-item"><div class="legend-line" style="background:#3b82f6"></div>Barcelona</div>
-              <div class="legend-item"><div class="legend-line" style="background:#f59e0b"></div>Valencia</div>
-              <div class="legend-item"><div class="legend-line" style="background:#8b5cf6"></div>Mallorca</div>
-              <div class="legend-item"><div class="legend-line" style="background:#06b6d4"></div>Online</div>
+              <div class="legend-item"><div class="legend-line" style="background:var(--c-brand);width:10px;height:10px;border-radius:3px;flex-shrink:0"></div>Madrid C.</div>
+              <div class="legend-item"><div class="legend-line" style="background:#3b82f6;width:10px;height:10px;border-radius:3px;flex-shrink:0"></div>Barcelona</div>
+              <div class="legend-item"><div class="legend-line" style="background:#f59e0b;width:10px;height:10px;border-radius:3px;flex-shrink:0"></div>Valencia</div>
+              <div class="legend-item"><div class="legend-line" style="background:#8b5cf6;width:10px;height:10px;border-radius:3px;flex-shrink:0"></div>Mallorca</div>
+              <div class="legend-item"><div class="legend-line" style="background:#06b6d4;width:10px;height:10px;border-radius:3px;flex-shrink:0"></div>Online</div>
             </div>
           </div>
           <div class="chart-body">
@@ -3461,8 +3460,10 @@ renderCatalog();
 const PERIOD_DATA = {
   '7d': {
     kpis: { ventas:['€ 94.2k','+3%'], fittings:['31','+8%','26 realizados (84%)'], ticket:['€ 1.823','+2%'], resolucion:['76%','+1pp'], conversion:['21%','+2pp'], horario:['38%','+9pp'] },
-    chart: { title:'Ventas por día · últimos 7 días (en miles €)', months:['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'], total:[12,15,14,18,16,22,8], maxV:30, lastLabel:'€22k', gridVals:[0,5,10,15,20,25,30],
-      stores:[{color:'#475569',values:[4.5,5.8,5.2,6.8,6.1,8.2,3.1]},{color:'#3b82f6',values:[3.8,4.9,4.4,5.7,5.2,7.1,2.8]},{color:'#f59e0b',values:[2.1,2.6,2.4,3.1,2.8,3.9,1.5]},{color:'#8b5cf6',values:[1.1,1.4,1.2,1.6,1.5,2.1,0.8]},{color:'#06b6d4',values:[0.5,0.6,0.5,0.7,0.6,0.9,0.3]}] },
+    chart: { title:'Ventas por tienda · últimos 7 días (en miles €)',
+      stores:['Madrid C.','Barcelona','Valencia','Mallorca','Online'],
+      values:[32,24,15,12,4], maxV:40, gridVals:[0,10,20,30,40],
+      colors:['#C0272D','#3b82f6','#f59e0b','#8b5cf6','#06b6d4'] },
     ticket: { vals:[1812,1830,1818,1841,1825,1849,1856], val:'€ 1.823', delta:'+2% vs día ant.', months:['L','M','X','J','V','S','D'] },
     split: { physical:91, online:9 },
     perf: { fittings:'26', fittingsSub:'84% de los agendados', nocturnas:'67' },
@@ -3483,8 +3484,10 @@ const PERIOD_DATA = {
   },
   'mes': {
     kpis: { ventas:['€ 427.6k','+8%'], fittings:['142','+15%','118 realizados (83%)'], ticket:['€ 1.847','+6%'], resolucion:['78%','+3pp'], conversion:['23%','+4pp'], horario:['34%','+6pp'] },
-    chart: { title:'Ventas por mes · últimos 8 meses (en miles €)', months:['Sep','Oct','Nov','Dic','Ene','Feb','Mar','Abr'], total:[412,468,422,328,368,418,452,491], maxV:600, lastLabel:'€491k', gridVals:[0,100,200,300,400,500,600],
-      stores:[{color:'#475569',values:[98,112,105,82,89,104,118,132]},{color:'#3b82f6',values:[72,83,76,57,63,74,88,101]},{color:'#f59e0b',values:[46,52,48,35,40,50,59,64]},{color:'#8b5cf6',values:[38,43,40,29,33,39,47,51]},{color:'#06b6d4',values:[11,13,12,9,10,12,15,16]}] },
+    chart: { title:'Ventas por tienda · este mes (en miles €)',
+      stores:['Madrid C.','Barcelona','Valencia','Mallorca','Online'],
+      values:[132,101,64,51,16], maxV:160, gridVals:[0,40,80,120,160],
+      colors:['#C0272D','#3b82f6','#f59e0b','#8b5cf6','#06b6d4'] },
     ticket: { vals:[1820,1890,1840,1760,1795,1830,1847,1920], val:'€ 1.847', delta:'+6% vs mes ant.', months:['Sep','Oct','Nov','Dic','Ene','Feb','Mar','Abr'] },
     split: { physical:94, online:6 },
     perf: { fittings:'118', fittingsSub:'83% de los agendados', nocturnas:'287' },
@@ -3505,8 +3508,10 @@ const PERIOD_DATA = {
   },
   '3m': {
     kpis: { ventas:['€ 1.276M','+11%'], fittings:['398','+18%','328 realizados (82%)'], ticket:['€ 1.862','+9%'], resolucion:['79%','+4pp'], conversion:['24%','+6pp'], horario:['35%','+7pp'] },
-    chart: { title:'Ventas por mes · últimos 12 meses (en miles €)', months:['May','Jun','Jul','Ago','Sep','Oct','Nov','Dic','Ene','Feb','Mar','Abr'], total:[358,412,381,298,412,468,422,328,368,418,452,491], maxV:600, lastLabel:'€491k', gridVals:[0,100,200,300,400,500,600],
-      stores:[{color:'#475569',values:[86,98,91,71,98,112,105,82,89,104,118,132]},{color:'#3b82f6',values:[65,76,70,52,72,83,76,57,63,74,88,101]},{color:'#f59e0b',values:[42,48,44,32,46,52,48,35,40,50,59,64]},{color:'#8b5cf6',values:[35,40,37,28,38,43,40,29,33,39,47,51]},{color:'#06b6d4',values:[9,11,10,8,11,13,12,9,10,12,15,16]}] },
+    chart: { title:'Ventas por tienda · últimos 3 meses (en miles €)',
+      stores:['Madrid C.','Barcelona','Valencia','Mallorca','Online'],
+      values:[380,289,187,147,47], maxV:450, gridVals:[0,100,200,300,400],
+      colors:['#C0272D','#3b82f6','#f59e0b','#8b5cf6','#06b6d4'] },
     ticket: { vals:[1790,1812,1798,1775,1820,1890,1840,1760,1795,1830,1847,1920], val:'€ 1.862', delta:'+9% vs trim. ant.', months:['May','Jun','Jul','Ago','Sep','Oct','Nov','Dic','Ene','Feb','Mar','Abr'] },
     split: { physical:93, online:7 },
     perf: { fittings:'328', fittingsSub:'82% de los agendados', nocturnas:'814' },
@@ -3529,43 +3534,46 @@ const PERIOD_DATA = {
 
 let currentPeriod = 'mes';
 
-function makeSvgPath(values, maxV, minV, cW, cH, ox, oy) {
-  const n = values.length, xS = cW / (n - 1), range = maxV - minV;
-  return values.map((v, i) => {
-    const x = (ox + i * xS).toFixed(1);
-    const y = (oy + cH - ((v - minV) / range) * cH).toFixed(1);
-    return `${i===0?'M':'L'}${x},${y}`;
-  }).join(' ');
-}
-
 function renderSalesChart() {
   const el = document.getElementById('sales-chart-svg');
   if (!el) return;
   const c = PERIOD_DATA[currentPeriod].chart;
-  const ox=52, oy=10, cW=700, cH=145, maxV=c.maxV, n=c.months.length, xS=cW/(n-1);
-  const grid = c.gridVals.map(v => {
-    const y=(oy+cH-(v/maxV)*cH).toFixed(1);
-    return `<line x1="${ox}" y1="${y}" x2="${ox+cW}" y2="${y}" stroke="#e5e5e3" stroke-width="1"/>
-    <text x="${ox-6}" y="${y}" text-anchor="end" dominant-baseline="middle" font-size="10" fill="#a0a09a">${v>0?v+'k':''}</text>`;
+  document.getElementById('chart-title').textContent = c.title;
+
+  const OX=52, OY=10, CW=700, CH=140, maxV=c.maxV;
+  const n = c.stores.length;
+  const slotW = CW / n;
+  const barW = Math.round(slotW * 0.52);
+  const barOff = Math.round((slotW - barW) / 2);
+  const R = 5; // corner radius
+
+  // Horizontal grid lines + Y labels
+  let svg = c.gridVals.map(v => {
+    const y = (OY + CH - (v / maxV) * CH).toFixed(1);
+    const label = v >= 1000 ? (v/1000)+'M' : v > 0 ? v+'k' : '';
+    return `<line x1="${OX}" y1="${y}" x2="${OX+CW}" y2="${y}" stroke="#E5E5E3" stroke-width="1"/>
+<text x="${OX-6}" y="${y}" text-anchor="end" dominant-baseline="middle" font-size="10" fill="#A0A09A">${label}</text>`;
   }).join('');
-  const xlabels = c.months.map((m,i) =>
-    `<text x="${(ox+i*xS).toFixed(1)}" y="${oy+cH+16}" text-anchor="middle" font-size="10" fill="#a0a09a">${m}</text>`
-  ).join('');
-  const storePaths = c.stores.map(s => {
-    const d = makeSvgPath(s.values,maxV,0,cW,cH,ox,oy);
-    return `<path d="${d}" fill="none" stroke="${s.color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.65"/>`;
-  }).join('');
-  const totalD = makeSvgPath(c.total,maxV,0,cW,cH,ox,oy);
-  const dots = c.total.map((v,i) => {
-    const x=(ox+i*xS).toFixed(1), y=(oy+cH-(v/maxV)*cH).toFixed(1);
-    return `<circle cx="${x}" cy="${y}" r="3" fill="white" stroke="#c0272d" stroke-width="2"/>`;
-  }).join('');
-  const lx=(ox+(n-1)*xS).toFixed(1), ly=(oy+cH-(c.total[n-1]/maxV)*cH).toFixed(1);
-  el.innerHTML = `${grid}${xlabels}${storePaths}
-    <path d="${totalD}" fill="none" stroke="#c0272d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-    ${dots}
-    <rect x="${parseFloat(lx)-26}" y="${parseFloat(ly)-23}" width="52" height="17" rx="4" fill="#c0272d"/>
-    <text x="${lx}" y="${parseFloat(ly)-11}" text-anchor="middle" font-size="10" font-weight="700" fill="white">${c.lastLabel}</text>`;
+
+  // Bars + value labels + store name labels
+  c.values.forEach((v, i) => {
+    const barH = Math.max(4, (v / maxV) * CH);
+    const bx   = (OX + i * slotW + barOff).toFixed(1);
+    const by   = (OY + CH - barH).toFixed(1);
+    const bh   = barH.toFixed(1);
+    const cx   = (OX + i * slotW + slotW / 2).toFixed(1);
+    const col  = c.colors[i];
+    const vLabel = v >= 1000 ? '€'+(v/1000).toFixed(1)+'M' : '€'+v+'k';
+
+    // Rounded-top bar (clip bottom corners)
+    svg += `<path d="M${parseFloat(bx)+R},${by} h${barW-2*R} a${R},${R} 0 0 1 ${R},${R} v${barH-R} h${-barW} v${-(barH-R)} a${R},${R} 0 0 1 ${R},${-R}z" fill="${col}"/>`;
+    // Value on top
+    svg += `<text x="${cx}" y="${parseFloat(by)-7}" text-anchor="middle" font-size="11" font-weight="700" fill="${col}">${vLabel}</text>`;
+    // Store name below
+    svg += `<text x="${cx}" y="${OY+CH+18}" text-anchor="middle" font-size="11" fill="#4A4A46" font-weight="500">${c.stores[i]}</text>`;
+  });
+
+  el.innerHTML = svg;
 }
 
 function renderTicketChart() {
